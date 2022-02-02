@@ -8,249 +8,203 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.AddBox
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bayu.instagramhomepage.R
+
+internal val colorsInstagram = listOf(
+    Color(0xFF515BD4),
+    Color(0xFF8134AF),
+    Color(0xFFDD2A7B),
+    Color(0xFFFEDA77),
+    Color(0xFFF58529),
+)
 
 @Composable
 fun HomeScreen() {
     Scaffold(
         topBar = {
-            Surface(
-                modifier = Modifier,
-                color = MaterialTheme.colors.background,
-                contentColor = MaterialTheme.colors.onBackground,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_instagram_logo),
-                        contentDescription = stringResource(R.string.desc_instagram_logo),
-                    )
-                    Row {
-                        HomeButton(imageVector = Icons.Outlined.AddBox)
-                        HomeButton(imageVector = Icons.Outlined.FavoriteBorder)
-                        HomeButton(imageVector = Icons.Outlined.ChatBubbleOutline)
-                    }
-                }
-            }
+            TopAppBar()
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding),
-        ) {
-            item {
-                Stories()
-            }
-            items(5) {
-                Post()
-            }
+        HomeContent(modifier = Modifier.padding(innerPadding))
+    }
+}
+
+@Composable
+fun TopAppBar() {
+    AppBar {
+        IconButton(imageVector = Icons.Outlined.AddBox)
+        IconButton(imageVector = Icons.Outlined.FavoriteBorder)
+        IconButton(imageVector = Icons.Outlined.ChatBubbleOutline)
+    }
+}
+
+@Composable
+fun HomeContent(
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+    ) {
+        item {
+            Stories()
+        }
+        item {
+            Divider(modifier = Modifier.padding(top = 12.dp))
+        }
+        items(15) {
+            Post()
         }
     }
 }
 
 @Composable
-fun Post() {
+fun Post(
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier
-            .padding(top = 12.dp, bottom = 16.dp)
+        modifier = modifier
+            .padding(bottom = 16.dp)
             .fillMaxWidth()
     ) {
-        Divider()
+        PostHeader(
+            name = "stevdza_san",
+            image = painterResource(id = R.drawable.image),
+        )
+        PostContent(
+            image = painterResource(id = R.drawable.image)
+        )
+        PostFooter()
+    }
+}
+
+@Composable
+fun PostHeader(
+    name: String,
+    image: Painter,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .padding(start = 16.dp, end = 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp)
-                .padding(start = 16.dp, end = 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            CircleBackground(
+                modifier = Modifier.size(35.dp),
+                border = BorderStroke(
+                    width = 2.dp,
+                    brush = Brush.verticalGradient(colorsInstagram)
+                )
             ) {
                 Surface(
                     modifier = Modifier
-                        .size(35.dp),
+                        .padding(3.dp),
                     shape = CircleShape,
                     border = BorderStroke(
-                        width = 2.dp,
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                Color(0xFF515BD4),
-                                Color(0xFF8134AF),
-                                Color(0xFFDD2A7B),
-                                Color(0xFFFEDA77),
-                                Color(0xFFF58529),
-                            )
-                        )
+                        1.dp,
+                        MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
                     ),
                 ) {
-                    Surface(
-                        modifier = Modifier
-                            .padding(3.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(
-                            1.dp,
-                            MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
-                        ),
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.image),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                    }
+                    Image(
+                        painter = image,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                    )
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "stevdza_san",
-                    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.SemiBold)
-                )
             }
-            HomeButton(imageVector = Icons.Outlined.MoreVert)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = name,
+                style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.SemiBold)
+            )
         }
-        Image(
-            painter = painterResource(id = R.drawable.image),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth(),
-        )
-//        Row(
-//            modifier = Modifier
-//                .padding(top = 0.dp, start = 2.dp, bottom = 12.dp, end = 2.dp)
-//                .fillMaxWidth(),
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//        ) {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                HomeButton(imageVector = Icons.Outlined.FavoriteBorder)
-//                HomeButton(imageVector = Icons.Outlined.ModeComment)
-//                HomeButton(imageVector = Icons.Outlined.Send)
-//            }
-//            HomeButton(imageVector = Icons.Outlined.TurnedInNot)
-//        }
+        IconButton(imageVector = Icons.Outlined.MoreVert)
     }
+}
+
+@Composable
+fun PostContent(
+    image: Painter,
+    modifier: Modifier = Modifier,
+) {
+    Image(
+        painter = image,
+        contentDescription = null,
+        modifier = modifier
+            .fillMaxWidth(),
+    )
+}
+
+@Composable
+fun PostFooter() {
+    // TODO not implement yet
 }
 
 @Composable
 fun Stories() {
     LazyRow {
         item {
-            Column(
-                modifier = Modifier.padding(start = 16.dp, end = 8.dp)
-            ) {
-                Box {
-                    Surface(
-                        modifier = Modifier
-                            .size(75.dp),
-                        shape = CircleShape,
-                        color = Color(0xFFf8fafc),
-                        border = BorderStroke(2.dp, Color.LightGray),
-                    ) {}
-                    Surface(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd),
-                        shape = CircleShape,
-                        color = Color(0xFF3b82f6),
-                        contentColor = Color.White,
-                        border = BorderStroke(2.dp, Color.White),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(4.dp)
-                                .size(16.dp),
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                LabelStory(text = "Your Story")
-            }
+            YourStory()
         }
         items(10) {
-            Column(
-                modifier = Modifier.padding(horizontal = 8.dp)
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .size(75.dp),
-                    shape = CircleShape,
-                    border = BorderStroke(
-                        width = 2.dp,
-                        brush = Brush.verticalGradient(
-                            listOf(
-                                Color(0xFF515BD4),
-                                Color(0xFF8134AF),
-                                Color(0xFFDD2A7B),
-                                Color(0xFFFEDA77),
-                                Color(0xFFF58529),
-                            )
-                        )
-                    )
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .padding(6.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, Color.LightGray),
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.image),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                LabelStory(text = "neojapan_")
-            }
+            Story(
+                name = "neojapan_",
+                painter = painterResource(id = R.drawable.image)
+            )
         }
     }
 }
 
 @Composable
-fun ColumnScope.LabelStory(
-    text: String,
+fun Story(
+    name: String,
+    painter: Painter,
+    modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = text,
-        modifier = Modifier
-            .align(alignment = CenterHorizontally),
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.body2.copy(color = Color.Black)
-    )
-}
-
-@Composable
-fun HomeButton(
-    imageVector: ImageVector,
-) {
-    IconButton(onClick = { /*TODO*/ }) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = null
-        )
+    Column(
+        modifier = modifier.padding(horizontal = 8.dp)
+    ) {
+        CircleBackground(
+            modifier = Modifier.size(75.dp),
+            border = BorderStroke(
+                width = 2.dp,
+                brush = Brush.verticalGradient(colorsInstagram)
+            )
+        ) {
+            Surface(
+                modifier = Modifier
+                    .padding(6.dp),
+                shape = CircleShape,
+                border = BorderStroke(1.dp, Color.LightGray),
+            ) {
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        LabelStory(text = name)
     }
 }
