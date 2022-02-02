@@ -1,4 +1,4 @@
-package com.bayu.instagramhomepage.ui
+package com.bayu.instagramhomepage.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -12,13 +12,11 @@ import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -36,13 +34,17 @@ internal val colorsInstagram = listOf(
 
 @Composable
 fun HomeScreen() {
-    Scaffold(
-        topBar = {
-            TopAppBar()
-        },
-    ) { innerPadding ->
-        HomeContent(modifier = Modifier.padding(innerPadding))
+    Column {
+        TopAppBar()
+        HomeContent()
     }
+//    Scaffold(
+//        topBar = {
+//            TopAppBar()
+//        },
+//    ) { innerPadding ->
+//        HomeContent(modifier = Modifier.padding(innerPadding))
+//    }
 }
 
 @Composable

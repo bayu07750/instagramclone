@@ -1,4 +1,4 @@
-package com.bayu.instagramhomepage.ui
+package com.bayu.instagramhomepage.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
