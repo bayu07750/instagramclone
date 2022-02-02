@@ -88,18 +88,18 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
+    val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+
     CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
         BottomNavigationItem(
             icon = {
                 Icon(
-                    imageVector = screen.icon,
+                    imageVector = if (selected) screen.selectedIcon else screen.unSelectedIcon,
                     contentDescription = "${screen.title} Icon"
                 )
             },
             alwaysShowLabel = false,
-            selected = currentDestination?.hierarchy?.any {
-                it.route == screen.route
-            } == true,
+            selected = selected,
             unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
             onClick = {
                 navController.navigate(screen.route) {

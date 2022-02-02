@@ -1,47 +1,50 @@
 package com.bayu.instagramhomepage.ui.bottomnav
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.SmartDisplay
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBarScreen(
     val route: String,
     val title: String,
-    val icon: ImageVector
+    val selectedIcon: ImageVector,
+    val unSelectedIcon: ImageVector,
 ) {
 
     object Home : BottomBarScreen(
         route = "home",
         title = "home",
-        icon = Icons.Rounded.Home
+        selectedIcon = Icons.Rounded.Home,
+        unSelectedIcon = Icons.Outlined.Home
     )
 
     object Search : BottomBarScreen(
         route = "search",
         title = "search",
-        icon = Icons.Rounded.Search
+        selectedIcon = Icons.Rounded.Search,
+        unSelectedIcon = Icons.Outlined.Search
     )
 
     object Reels : BottomBarScreen(
         route = "reals",
         title = "reals",
-        icon = Icons.Outlined.SmartDisplay
+        selectedIcon = Icons.Rounded.SmartDisplay,
+        unSelectedIcon = Icons.Outlined.SmartDisplay
     )
 
     object Shopping : BottomBarScreen(
         route = "shopping",
         title = "shopping",
-        icon = Icons.Outlined.ShoppingBag,
+        selectedIcon = Icons.Rounded.ShoppingBag,
+        unSelectedIcon = Icons.Outlined.ShoppingBag
     )
 
     object Profile : BottomBarScreen(
         route = "profile",
         title = "profile",
-        icon = Icons.Outlined.AccountCircle,
+        selectedIcon = Icons.Rounded.AccountCircle,
+        unSelectedIcon = Icons.Outlined.AccountCircle
     )
 
 }
