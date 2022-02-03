@@ -23,7 +23,7 @@ fun ColumnScope.BottomSheetContent() {
     Surface(
         modifier = Modifier
             .padding(top = 12.dp)
-            .widthIn(min = 60.dp)
+            .widthIn(min = 40.dp)
             .heightIn(min = 4.dp)
             .align(alignment = Alignment.CenterHorizontally),
         color = Color.Gray,
