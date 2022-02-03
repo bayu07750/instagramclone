@@ -21,12 +21,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bayu.instagramhomepage.R
+import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
 
 internal val colorsInstagram = listOf(
-    Color(0xFF515BD4),
-    Color(0xFF8134AF),
     Color(0xFFDD2A7B),
     Color(0xFFFEDA77),
     Color(0xFFF58529),
@@ -38,13 +38,6 @@ fun HomeScreen() {
         TopAppBar()
         HomeContent()
     }
-//    Scaffold(
-//        topBar = {
-//            TopAppBar()
-//        },
-//    ) { innerPadding ->
-//        HomeContent(modifier = Modifier.padding(innerPadding))
-//    }
 }
 
 @Composable
@@ -154,6 +147,7 @@ fun PostContent(
         contentDescription = null,
         modifier = modifier
             .fillMaxWidth(),
+        contentScale = ContentScale.FillWidth,
     )
 }
 
@@ -208,5 +202,13 @@ fun Story(
         }
         Spacer(modifier = Modifier.height(6.dp))
         LabelStory(text = name)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomePreview() {
+    InstagramHomePageTheme {
+        HomeScreen()
     }
 }
