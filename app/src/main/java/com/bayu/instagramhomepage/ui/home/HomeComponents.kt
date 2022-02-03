@@ -4,13 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,11 +51,12 @@ fun AppBar(
 
 @Composable
 fun IconButton(
-    imageVector: ImageVector,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    imageVector: ImageVector,
 ) {
-    androidx.compose.material.IconButton(
-        onClick = { /*TODO*/ },
+    IconButton(
+        onClick = onClick,
         modifier = modifier,
     ) {
         Icon(
@@ -126,5 +125,36 @@ fun YourStory() {
         }
         Spacer(modifier = Modifier.height(6.dp))
         LabelStory(text = "Your Story")
+    }
+}
+
+@Composable
+fun CircleButton(
+    imageVector: ImageVector,
+    contentDescription: String? = null,
+    label: String,
+    isImportant: Boolean = false,
+) {
+    Column {
+        Surface(
+            modifier = Modifier,
+            shape = CircleShape,
+            color = Color.White,
+            contentColor = if (isImportant) Color.Red else Color.Black,
+            border = if (isImportant) BorderStroke(1.dp, Color.Red) else BorderStroke(
+                2.dp,
+                Color.Gray
+            ),
+        ) {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+        }
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            LabelStory(text = label, modifier = Modifier.padding(top = 8.dp))
+        }
     }
 }

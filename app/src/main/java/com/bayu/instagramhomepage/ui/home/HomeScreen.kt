@@ -2,17 +2,17 @@ package com.bayu.instagramhomepage.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddBox
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
+import kotlinx.coroutines.launch
 
 internal val colorsInstagram = listOf(
     Color(0xFFDD2A7B),
@@ -32,12 +33,87 @@ internal val colorsInstagram = listOf(
     Color(0xFFF58529),
 )
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen() {
-    Column {
-        TopAppBar()
-        HomeContent()
+    val bottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+    val scope = rememberCoroutineScope()
+
+    ModalBottomSheetLayout(
+        sheetContent = {
+            BottomSheetContent()
+        },
+        sheetState = bottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+    ) {
+        Column {
+            TopAppBar()
+            HomeContent(
+                onShowBottomSheet = { scope.launch { bottomSheetState.show() } },
+                onHideBottomSheet = { scope.launch { bottomSheetState.hide() } }
+            )
+        }
     }
+}
+
+@Composable
+fun ColumnScope.BottomSheetContent() {
+    Surface(
+        modifier = Modifier
+            .padding(top = 12.dp)
+            .widthIn(min = 60.dp)
+            .heightIn(min = 4.dp)
+            .align(alignment = Alignment.CenterHorizontally),
+        color = Color.Gray,
+        shape = RoundedCornerShape(30.dp),
+    ) { }
+    Row(
+        modifier = Modifier
+            .padding(vertical = 16.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround,
+    ) {
+        CircleButton(
+            imageVector = Icons.Outlined.Link,
+            label = "Link",
+            contentDescription = "Link icon"
+        )
+        CircleButton(
+            imageVector = Icons.Outlined.Share,
+            label = "Share",
+            contentDescription = "Share icon"
+        )
+        CircleButton(
+            imageVector = Icons.Outlined.Report,
+            label = "Report",
+            contentDescription = "Report Icon",
+            isImportant = true,
+        )
+    }
+    val horizontalPadding = Modifier
+        .fillMaxWidth()
+        .clickable { /**/ }
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+    Divider()
+    Text(
+        text = "Why you're seeing this post",
+        modifier = horizontalPadding,
+        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+    )
+    Divider()
+    Text(
+        text = "Hide",
+        modifier = horizontalPadding,
+        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+    )
+    Text(
+        text = "Unfollow",
+        modifier = horizontalPadding,
+        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+    )
+    Spacer(modifier = Modifier.height(64.dp))
 }
 
 @Composable
@@ -51,6 +127,8 @@ fun TopAppBar() {
 
 @Composable
 fun HomeContent(
+    onShowBottomSheet: () -> Unit,
+    onHideBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -63,13 +141,16 @@ fun HomeContent(
             Divider(modifier = Modifier.padding(top = 12.dp))
         }
         items(15) {
-            Post()
+            Post(
+                onShowBottomSheet = onShowBottomSheet,
+            )
         }
     }
 }
 
 @Composable
 fun Post(
+    onShowBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -78,6 +159,7 @@ fun Post(
             .fillMaxWidth()
     ) {
         PostHeader(
+            onMorePostClicked = onShowBottomSheet,
             name = "stevdza_san",
             image = painterResource(id = R.drawable.image),
         )
@@ -90,6 +172,7 @@ fun Post(
 
 @Composable
 fun PostHeader(
+    onMorePostClicked: () -> Unit,
     name: String,
     image: Painter,
 ) {
@@ -133,7 +216,7 @@ fun PostHeader(
                 style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.SemiBold)
             )
         }
-        IconButton(imageVector = Icons.Outlined.MoreVert)
+        IconButton(imageVector = Icons.Outlined.MoreVert, onClick = onMorePostClicked)
     }
 }
 
