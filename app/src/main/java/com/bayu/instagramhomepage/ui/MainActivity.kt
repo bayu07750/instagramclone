@@ -1,4 +1,4 @@
-package com.bayu.instagramhomepage
+package com.bayu.instagramhomepage.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
