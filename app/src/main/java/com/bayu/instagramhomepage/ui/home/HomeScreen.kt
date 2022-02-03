@@ -8,11 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,9 +25,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bayu.instagramhomepage.R
+import com.bayu.instagramhomepage.ui.MainViewModel
 import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
-import kotlinx.coroutines.launch
 
 internal val colorsInstagram = listOf(
     Color(0xFFDD2A7B),
@@ -33,28 +36,16 @@ internal val colorsInstagram = listOf(
     Color(0xFFF58529),
 )
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen() {
-    val bottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
-    val scope = rememberCoroutineScope()
-
-    ModalBottomSheetLayout(
-        sheetContent = {
-            BottomSheetContent()
-        },
-        sheetState = bottomSheetState,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-    ) {
-        Column {
-            TopAppBar()
-            HomeContent(
-                onShowBottomSheet = { scope.launch { bottomSheetState.show() } },
-                onHideBottomSheet = { scope.launch { bottomSheetState.hide() } }
-            )
-        }
+fun HomeScreen(
+    mainViewModel: MainViewModel = viewModel(),
+) {
+    Column {
+        TopAppBar()
+        HomeContent(
+            onShowBottomSheet = { mainViewModel.showBottomSheet() },
+            onHideBottomSheet = { /* TODO hide bottom sheet */ }
+        )
     }
 }
 

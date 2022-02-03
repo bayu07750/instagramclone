@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bayu.instagramhomepage.ui.MainViewModel
 import com.bayu.instagramhomepage.ui.home.HomeScreen
 import com.bayu.instagramhomepage.ui.profile.ProfileScreen
 import com.bayu.instagramhomepage.ui.reels.ReelsScreen
@@ -14,6 +15,7 @@ import com.bayu.instagramhomepage.ui.shopping.ShoppingScreen
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -22,7 +24,7 @@ fun BottomNavGraph(
         modifier = modifier,
     ) {
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
+            HomeScreen(mainViewModel = viewModel)
         }
         composable(route = BottomBarScreen.Search.route) {
             SearchScreen()

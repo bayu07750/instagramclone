@@ -3,15 +3,13 @@ package com.bayu.instagramhomepage.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -23,10 +21,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bayu.instagramhomepage.ui.bottomnav.BottomBarScreen
 import com.bayu.instagramhomepage.ui.bottomnav.BottomNavGraph
+import com.bayu.instagramhomepage.ui.home.BottomSheetContent
 import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
+import com.bayu.instagramhomepage.ui.utils.ClearRippleTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,24 +40,52 @@ class MainActivity : ComponentActivity() {
                     systemUiController.setStatusBarColor(Color.White)
                 }
                 Surface(color = MaterialTheme.colors.background) {
-                    MainScreen()
+                    MainScreen(viewModel)
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    viewModel: MainViewModel,
+) {
     val navController = rememberNavController()
+    val bottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
+    )
+    val isBottomSheetShow by viewModel.isBottomSheetShow.collectAsState()
 
-    Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+    LaunchedEffect(bottomSheetState.currentValue) {
+        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
+            viewModel.hideBottomSheet()
+        }
+    }
+
+    LaunchedEffect(isBottomSheetShow) {
+        if (isBottomSheetShow) {
+            bottomSheetState.show()
+        }
+    }
+
+    ModalBottomSheetLayout(
+        sheetContent = {
+            BottomSheetContent()
+        },
+        sheetState = bottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
-        BottomNavGraph(
-            navController = navController,
-            modifier = Modifier.padding(it)
-        )
+        Scaffold(
+            bottomBar = { BottomBar(navController = navController) }
+        ) {
+            BottomNavGraph(
+                navController = navController,
+                viewModel = viewModel,
+                modifier = Modifier.padding(it)
+            )
+        }
     }
 }
 
@@ -113,17 +144,4 @@ fun RowScope.AddItem(
             }
         )
     }
-}
-
-object ClearRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor(): Color = Color.Transparent
-
-    @Composable
-    override fun rippleAlpha() = RippleAlpha(
-        draggedAlpha = 0.0f,
-        focusedAlpha = 0.0f,
-        hoveredAlpha = 0.0f,
-        pressedAlpha = 0.0f,
-    )
 }
