@@ -1,12 +1,11 @@
 package com.bayu.instagramhomepage.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Report
@@ -15,8 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bayu.instagramhomepage.ui.home.CircleButton
+import com.bayu.instagramhomepage.ui.home.LabelStory
 
 @Composable
 fun ColumnScope.BottomSheetContent() {
@@ -74,4 +74,33 @@ fun ColumnScope.BottomSheetContent() {
         style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
     )
     Spacer(modifier = Modifier.height(64.dp))
+}
+
+@Composable
+fun CircleButton(
+    imageVector: ImageVector,
+    contentDescription: String? = null,
+    label: String,
+    isImportant: Boolean = false,
+) {
+    Column {
+        Surface(
+            modifier = Modifier,
+            shape = CircleShape,
+            color = Color.White,
+            contentColor = if (isImportant) Color.Red else Color.Black,
+            border = if (isImportant) BorderStroke(1.dp, Color.Red) else BorderStroke(
+                2.dp,
+                Color.Gray
+            ),
+        ) {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+        }
+        LabelStory(text = label, modifier = Modifier.padding(top = 8.dp))
+    }
 }

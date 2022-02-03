@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -125,36 +124,5 @@ fun YourStory() {
         }
         Spacer(modifier = Modifier.height(6.dp))
         LabelStory(text = "Your Story")
-    }
-}
-
-@Composable
-fun CircleButton(
-    imageVector: ImageVector,
-    contentDescription: String? = null,
-    label: String,
-    isImportant: Boolean = false,
-) {
-    Column {
-        Surface(
-            modifier = Modifier,
-            shape = CircleShape,
-            color = Color.White,
-            contentColor = if (isImportant) Color.Red else Color.Black,
-            border = if (isImportant) BorderStroke(1.dp, Color.Red) else BorderStroke(
-                2.dp,
-                Color.Gray
-            ),
-        ) {
-            Icon(
-                imageVector = imageVector,
-                contentDescription = contentDescription,
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-        }
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            LabelStory(text = label, modifier = Modifier.padding(top = 8.dp))
-        }
     }
 }
