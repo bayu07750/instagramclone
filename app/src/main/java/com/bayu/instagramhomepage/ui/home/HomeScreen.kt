@@ -1,7 +1,9 @@
 package com.bayu.instagramhomepage.ui.home
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,16 +14,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.MainViewModel
 import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
+import com.bayu.instagramhomepage.ui.utils.ClearRippleTheme
 
 internal val colorsInstagram = listOf(
     Color(0xFFDD2A7B),
@@ -175,7 +176,7 @@ fun PostContent(
 }
 
 @Composable
-fun ColumnScope.PostFooter() {
+fun PostFooter() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,10 +185,12 @@ fun ColumnScope.PostFooter() {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row {
-            Icon(
-                imageVector = Icons.Outlined.FavoriteBorder,
-                contentDescription = null,
-                modifier = Modifier.size(28.dp)
+            var isButtonFavoriteChecked by remember { mutableStateOf(false) }
+            ToggleButton(
+                checkedImageVector = Icons.Outlined.Favorite,
+                unCheckedImageVector = Icons.Outlined.FavoriteBorder,
+                isChecked = isButtonFavoriteChecked,
+                onClick = { isButtonFavoriteChecked = !isButtonFavoriteChecked }
             )
             Spacer(modifier = Modifier.width(16.dp))
             Icon(
