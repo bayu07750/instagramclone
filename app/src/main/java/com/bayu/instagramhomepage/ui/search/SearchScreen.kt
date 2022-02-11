@@ -112,16 +112,18 @@ fun RowScope.ExplorePostRowItem(post: Post) {
                     ),
                 contentScale = ContentScale.Crop
             )
-            when (post.typePost) {
-                TypePost.Collections, TypePost.Video, TypePost.Shopping -> {
-                    Icon(
-                        imageVector = post.typePost.imageVector!!,
-                        contentDescription = post.typePost.description,
-                        modifier = Modifier
-                            .padding(top = 4.dp, end = 4.dp)
-                    )
+            if (isLoadImageSuccessfully) {
+                when (post.typePost) {
+                    TypePost.Collections, TypePost.Video, TypePost.Shopping -> {
+                        Icon(
+                            imageVector = post.typePost.imageVector!!,
+                            contentDescription = post.typePost.description,
+                            modifier = Modifier
+                                .padding(top = 4.dp, end = 4.dp)
+                        )
+                    }
+                    TypePost.Photo -> {}
                 }
-                TypePost.Photo -> {}
             }
         }
     }
