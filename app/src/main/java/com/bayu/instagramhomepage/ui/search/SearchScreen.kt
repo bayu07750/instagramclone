@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -15,13 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bayu.instagramhomepage.R
+import coil.compose.rememberImagePainter
+import com.bayu.instagramhomepage.ui.utils.Data
+import com.bayu.instagramhomepage.ui.utils.Post
+import com.bayu.instagramhomepage.ui.utils.Posts
+import com.bayu.instagramhomepage.ui.utils.TypePost
 
 @OptIn(ExperimentalFoundationApi::class)
-@Preview(showBackground = true)
 @Composable
 fun SearchScreen() {
     Column(
@@ -35,39 +37,65 @@ fun SearchScreen() {
 
 @Composable
 fun ColumnScope.SearchContent() {
+    ExplorePosts()
+}
+
+@Composable
+fun ColumnScope.ExplorePosts(
+    listPosts: List<Posts> = Data.dummyDataPosts
+) {
     LazyColumn {
-        items(10) {
-            Row(
-                modifier = Modifier.weight(3F)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .weight(1F)
-                        .heightIn(min = 120.dp, max = 120.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(2.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .weight(1F)
-                        .heightIn(min = 120.dp, max = 120.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(2.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .weight(1F)
-                        .heightIn(min = 120.dp, max = 120.dp),
-                    contentScale = ContentScale.Crop
-                )
+        items(listPosts) { posts ->
+            ExplorePostRow(posts = posts.post)
+        }
+    }
+}
+
+@Composable
+fun ColumnScope.ExplorePostRow(posts: List<Post>) {
+    Row(
+        modifier = Modifier.weight(3F)
+    ) {
+        ExplorePostRowItem(post = posts[0])
+        Spacer(modifier = Modifier.width(2.dp))
+        ExplorePostRowItem(post = posts[1])
+        Spacer(modifier = Modifier.width(2.dp))
+        ExplorePostRowItem(post = posts[2])
+    }
+    Spacer(modifier = Modifier.height(2.dp))
+}
+
+@Composable
+fun RowScope.ExplorePostRowItem(post: Post) {
+    Surface(
+        contentColor = Color.White,
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1F),
+            contentAlignment = Alignment.TopEnd,
+        ) {
+            Image(
+                painter = rememberImagePainter(post.image) {
+                    crossfade(true)
+                },
+                contentDescription = null,
+                modifier = Modifier
+                    .widthIn(min = 120.dp, max = 120.dp)
+                    .heightIn(min = 120.dp, max = 120.dp),
+                contentScale = ContentScale.Crop
+            )
+            when (post.typePost) {
+                TypePost.Collections, TypePost.Video, TypePost.Shopping -> {
+                    Icon(
+                        imageVector = post.typePost.imageVector!!,
+                        contentDescription = post.typePost.description,
+                        modifier = Modifier
+                            .padding(top = 4.dp, end = 4.dp)
+                    )
+                }
+                TypePost.Photo -> {}
             }
-            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }
