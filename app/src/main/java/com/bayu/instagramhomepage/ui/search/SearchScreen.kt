@@ -11,17 +11,22 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Post
 import com.bayu.instagramhomepage.ui.utils.Posts
 import com.bayu.instagramhomepage.ui.utils.TypePost
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -65,6 +70,7 @@ fun ColumnScope.ExplorePostRow(posts: List<Post>) {
     Spacer(modifier = Modifier.height(2.dp))
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun RowScope.ExplorePostRowItem(post: Post) {
     Surface(
@@ -75,14 +81,35 @@ fun RowScope.ExplorePostRowItem(post: Post) {
                 .weight(1F),
             contentAlignment = Alignment.TopEnd,
         ) {
+            val imagePainter = rememberImagePainter(post.image) {
+                crossfade(true)
+            }
+
+            var isLoadImageSuccessfully by remember { mutableStateOf(false) }
+
+            LaunchedEffect(imagePainter.state) {
+                when (imagePainter.state) {
+                    is ImagePainter.State.Loading -> {
+                        isLoadImageSuccessfully = false
+                    }
+                    is ImagePainter.State.Success -> {
+                        isLoadImageSuccessfully = true
+                    }
+                    else -> { /* TODO handle other state here */
+                    }
+                }
+            }
+
             Image(
-                painter = rememberImagePainter(post.image) {
-                    crossfade(true)
-                },
+                painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
                     .widthIn(min = 120.dp, max = 120.dp)
-                    .heightIn(min = 120.dp, max = 120.dp),
+                    .heightIn(min = 120.dp, max = 120.dp)
+                    .placeholder(
+                        visible = !isLoadImageSuccessfully,
+                        highlight = PlaceholderHighlight.shimmer(),
+                    ),
                 contentScale = ContentScale.Crop
             )
             when (post.typePost) {
