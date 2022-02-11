@@ -1,7 +1,9 @@
 package com.bayu.instagramhomepage.ui.search
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -28,51 +31,83 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
+@SuppressLint("UnusedTransitionTargetStateParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        SearchBar()
-        SearchContent()
+    var isPopupPostVisible by remember { mutableStateOf(false) }
+    var imageForPopupPost by remember { mutableStateOf("") }
+
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            SearchBar()
+            SearchContent { visible, image ->
+                isPopupPostVisible = visible
+                imageForPopupPost = image
+            }
+        }
+        PopupPost(
+            isPopupPostVisible = isPopupPostVisible,
+            image = imageForPopupPost
+        )
     }
 }
 
 @Composable
-fun ColumnScope.SearchContent() {
-    ExplorePosts()
+fun ColumnScope.SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
+    ExplorePosts(onLongPressPost = onLongPressPost)
 }
 
 @Composable
 fun ColumnScope.ExplorePosts(
-    listPosts: List<Posts> = Data.dummyDataPosts
+    listPosts: List<Posts> = Data.dummyDataPosts,
+    onLongPressPost: (Boolean, String) -> Unit,
 ) {
     LazyColumn {
         items(listPosts) { posts ->
-            ExplorePostRow(posts = posts.post)
+            ExplorePostRow(
+                posts = posts.post,
+                onLongPressPost = onLongPressPost,
+            )
         }
     }
 }
 
 @Composable
-fun ColumnScope.ExplorePostRow(posts: List<Post>) {
+fun ColumnScope.ExplorePostRow(
+    posts: List<Post>,
+    onLongPressPost: (Boolean, String) -> Unit,
+) {
     Row(
         modifier = Modifier.weight(3F)
     ) {
-        ExplorePostRowItem(post = posts[0])
+        ExplorePostRowItem(
+            post = posts[0],
+            onLongPressPost = onLongPressPost
+        )
         Spacer(modifier = Modifier.width(2.dp))
-        ExplorePostRowItem(post = posts[1])
+        ExplorePostRowItem(
+            post = posts[1],
+            onLongPressPost = onLongPressPost
+        )
         Spacer(modifier = Modifier.width(2.dp))
-        ExplorePostRowItem(post = posts[2])
+        ExplorePostRowItem(
+            post = posts[2],
+            onLongPressPost = onLongPressPost
+        )
     }
     Spacer(modifier = Modifier.height(2.dp))
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun RowScope.ExplorePostRowItem(post: Post) {
+fun RowScope.ExplorePostRowItem(
+    post: Post,
+    onLongPressPost: (Boolean, String) -> Unit,
+) {
     Surface(
         contentColor = Color.White,
     ) {
@@ -109,7 +144,18 @@ fun RowScope.ExplorePostRowItem(post: Post) {
                     .placeholder(
                         visible = !isLoadImageSuccessfully,
                         highlight = PlaceholderHighlight.shimmer(),
-                    ),
+                    )
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = {
+                                onLongPressPost.invoke(true, post.image)
+                            },
+                            onPress = {
+                                awaitRelease()
+                                onLongPressPost.invoke(false, "")
+                            },
+                        )
+                    },
                 contentScale = ContentScale.Crop
             )
             if (isLoadImageSuccessfully) {
