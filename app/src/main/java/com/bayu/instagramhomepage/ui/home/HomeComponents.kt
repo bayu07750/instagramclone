@@ -58,9 +58,9 @@ fun AppBar(
 
 @Composable
 fun IconButton(
+    imageVector: ImageVector,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    imageVector: ImageVector,
 ) {
     IconButton(
         onClick = onClick,

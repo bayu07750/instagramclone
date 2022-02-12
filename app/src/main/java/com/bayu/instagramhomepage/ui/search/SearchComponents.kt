@@ -7,7 +7,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.R
+import com.bayu.instagramhomepage.ui.home.IconButton
 
 @Composable
 fun PopupPost(
@@ -86,30 +89,18 @@ fun PopupPost(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceAround,
                     ) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Outlined.FavoriteBorder,
-                                contentDescription = "Favorite Icon"
-                            )
-                        }
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Outlined.AccountCircle,
-                                contentDescription = "Profile Icon"
-                            )
-                        }
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Send,
-                                contentDescription = "Send Icon"
-                            )
-                        }
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Outlined.MoreVert,
-                                contentDescription = "More Icon"
-                            )
-                        }
+                        IconButton(
+                            imageVector = Icons.Outlined.FavoriteBorder
+                        )
+                        IconButton(
+                            imageVector = Icons.Outlined.AccountCircle
+                        )
+                        IconButton(
+                            imageVector = Icons.Outlined.Send
+                        )
+                        IconButton(
+                            imageVector = Icons.Outlined.MoreVert
+                        )
                     }
                 }
             }
