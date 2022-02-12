@@ -5,7 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -25,7 +26,6 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Post
-import com.bayu.instagramhomepage.ui.utils.Posts
 import com.bayu.instagramhomepage.ui.utils.TypePost
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -61,50 +61,26 @@ fun ColumnScope.SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
     ExplorePosts(onLongPressPost = onLongPressPost)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ColumnScope.ExplorePosts(
-    listPosts: List<Posts> = Data.dummyDataPosts,
+fun ExplorePosts(
+    listPosts: List<Post> = Data.dummyDataPosts,
     onLongPressPost: (Boolean, String) -> Unit,
 ) {
-    LazyColumn {
-        items(listPosts) { posts ->
-            ExplorePostRow(
-                posts = posts.post,
-                onLongPressPost = onLongPressPost,
-            )
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(3),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        items(listPosts) { post ->
+            ExplorePostRowItem(post = post, onLongPressPost = onLongPressPost)
         }
     }
 }
 
-@Composable
-fun ColumnScope.ExplorePostRow(
-    posts: List<Post>,
-    onLongPressPost: (Boolean, String) -> Unit,
-) {
-    Row(
-        modifier = Modifier.weight(3F)
-    ) {
-        ExplorePostRowItem(
-            post = posts[0],
-            onLongPressPost = onLongPressPost
-        )
-        Spacer(modifier = Modifier.width(2.dp))
-        ExplorePostRowItem(
-            post = posts[1],
-            onLongPressPost = onLongPressPost
-        )
-        Spacer(modifier = Modifier.width(2.dp))
-        ExplorePostRowItem(
-            post = posts[2],
-            onLongPressPost = onLongPressPost
-        )
-    }
-    Spacer(modifier = Modifier.height(2.dp))
-}
-
 @OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun RowScope.ExplorePostRowItem(
+fun ExplorePostRowItem(
     post: Post,
     onLongPressPost: (Boolean, String) -> Unit,
 ) {
@@ -112,8 +88,7 @@ fun RowScope.ExplorePostRowItem(
         contentColor = Color.White,
     ) {
         Box(
-            modifier = Modifier
-                .weight(1F),
+            modifier = Modifier,
             contentAlignment = Alignment.TopEnd,
         ) {
             val imagePainter = rememberImagePainter(post.image) {
@@ -139,8 +114,8 @@ fun RowScope.ExplorePostRowItem(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .widthIn(min = 120.dp, max = 120.dp)
-                    .heightIn(min = 120.dp, max = 120.dp)
+                    .widthIn(min = 120.dp)
+                    .heightIn(min = 120.dp)
                     .placeholder(
                         visible = !isLoadImageSuccessfully,
                         highlight = PlaceholderHighlight.shimmer(),
