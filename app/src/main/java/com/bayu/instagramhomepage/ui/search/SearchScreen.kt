@@ -57,7 +57,7 @@ fun SearchScreen() {
 }
 
 @Composable
-fun ColumnScope.SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
+fun SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
     ExplorePosts(onLongPressPost = onLongPressPost)
 }
 
