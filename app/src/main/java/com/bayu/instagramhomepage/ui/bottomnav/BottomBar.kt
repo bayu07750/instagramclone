@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -17,7 +18,8 @@ import com.bayu.instagramhomepage.ui.utils.ClearRippleTheme
 
 @Composable
 fun BottomBar(
-    navController: NavHostController
+    navController: NavHostController,
+    setStatusBarColor: (Color) -> Unit,
 ) {
     val screens = listOf(
         BottomBarScreen.Home,
@@ -28,9 +30,18 @@ fun BottomBar(
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val isReelsScreenDestination = currentDestination?.route == BottomBarScreen.Reels.route
+
+    if (isReelsScreenDestination) {
+        setStatusBarColor(Color.Black)
+    } else {
+        setStatusBarColor(Color.White)
+    }
+
     BottomNavigation(
         modifier = Modifier,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = if (isReelsScreenDestination) MaterialTheme.colors.onBackground else MaterialTheme.colors.background,
+        contentColor = if (isReelsScreenDestination) MaterialTheme.colors.background else MaterialTheme.colors.onBackground,
         elevation = 0.dp,
     ) {
         screens.forEach { screen ->

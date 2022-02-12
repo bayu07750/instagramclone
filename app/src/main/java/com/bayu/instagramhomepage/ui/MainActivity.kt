@@ -7,10 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -30,11 +27,15 @@ class MainActivity : ComponentActivity() {
             InstagramHomePageTheme {
                 val systemUiController = rememberSystemUiController()
                 val isLightTheme = MaterialTheme.colors.isLight
+
                 if (isLightTheme) {
                     systemUiController.setStatusBarColor(Color.White)
                 }
+
                 Surface(color = MaterialTheme.colors.background) {
-                    MainScreen(viewModel)
+                    MainScreen(viewModel) {
+                        systemUiController.setStatusBarColor(it)
+                    }
                 }
             }
         }
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
+    setStatusBarColor: (Color) -> Unit,
 ) {
     val navController = rememberNavController()
     val bottomSheetState = rememberModalBottomSheetState(
@@ -72,7 +74,7 @@ fun MainScreen(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
         Scaffold(
-            bottomBar = { BottomBar(navController = navController) }
+            bottomBar = { BottomBar(navController = navController, setStatusBarColor = setStatusBarColor) }
         ) {
             BottomNavGraph(
                 navController = navController,
