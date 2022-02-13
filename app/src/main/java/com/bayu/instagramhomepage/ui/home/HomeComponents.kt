@@ -2,7 +2,9 @@ package com.bayu.instagramhomepage.ui.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,6 +19,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -57,23 +60,6 @@ fun AppBar(
 }
 
 @Composable
-fun IconButton(
-    imageVector: ImageVector,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier,
-    ) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
 fun ColumnScope.LabelStory(
     text: String,
     modifier: Modifier = Modifier,
@@ -104,83 +90,5 @@ fun CircleBackground(
         border = border,
     ) {
         content()
-    }
-}
-
-@Composable
-fun YourStory() {
-    Column(
-        modifier = Modifier.padding(start = 16.dp, end = 8.dp)
-    ) {
-        Box {
-            CircleBackground(modifier = Modifier.size(75.dp))
-            CircleBackground(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd),
-                color = Color(0xFF3b82f6),
-                contentColor = Color.White,
-                border = BorderStroke(2.dp, Color.White)
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .size(16.dp),
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(6.dp))
-        LabelStory(text = "Your Story")
-    }
-}
-
-@SuppressLint("UnusedTransitionTargetStateParameter")
-@Composable
-fun ToggleButton(
-    checkedImageVector: ImageVector,
-    unCheckedImageVector: ImageVector,
-    isChecked: Boolean,
-    onClick: () -> Unit
-) {
-    val transition = updateTransition(targetState = isChecked, label = "Checked Favorite Button")
-
-    val tint by transition.animateColor(
-        label = "Tint color",
-        transitionSpec = {
-            spring()
-        }
-    ) {
-        if (it) Color.Red else Color.Black
-    }
-
-    val size by transition.animateDp(
-        label = "Size Button",
-        transitionSpec = {
-            if (false isTransitioningTo true) {
-                keyframes {
-                    durationMillis = 250
-                    30.dp at 0 with LinearOutSlowInEasing // for 0-15 ms
-                    35.dp at 15 with FastOutLinearInEasing // for 15-75 ms
-                    40.dp at 75 // ms
-                    35.dp at 150 // ms
-                }
-            } else {
-                spring(stiffness = Spring.StiffnessVeryLow)
-            }
-        }
-    ) {
-        30.dp
-    }
-
-    CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
-        Icon(
-            imageVector = if (isChecked) checkedImageVector else unCheckedImageVector,
-            contentDescription = null,
-            modifier = Modifier
-                .clickable(onClick = onClick)
-                .size(size),
-            tint = tint,
-        )
     }
 }

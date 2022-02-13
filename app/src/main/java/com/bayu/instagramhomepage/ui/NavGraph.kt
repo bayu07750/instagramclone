@@ -1,11 +1,11 @@
-package com.bayu.instagramhomepage.ui.bottomnav
+package com.bayu.instagramhomepage.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.bayu.instagramhomepage.ui.MainViewModel
+import com.bayu.instagramhomepage.ui.bottomnav.BottomBarScreen
 import com.bayu.instagramhomepage.ui.home.HomeScreen
 import com.bayu.instagramhomepage.ui.profile.ProfileScreen
 import com.bayu.instagramhomepage.ui.reels.ReelsScreen
@@ -13,10 +13,11 @@ import com.bayu.instagramhomepage.ui.search.SearchScreen
 import com.bayu.instagramhomepage.ui.shopping.ShoppingScreen
 
 @Composable
-fun BottomNavGraph(
+fun NavGraph(
     navController: NavHostController,
-    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
+    onShowBottomSheet: () -> Unit,
+    onHideBottomSheet: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -24,7 +25,10 @@ fun BottomNavGraph(
         modifier = modifier,
     ) {
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen(mainViewModel = viewModel)
+            HomeScreen(
+                onShowBottomSheet = onShowBottomSheet,
+                onHideBottomSheet = onHideBottomSheet,
+            )
         }
         composable(route = BottomBarScreen.Search.route) {
             SearchScreen()

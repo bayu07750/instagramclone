@@ -1,4 +1,4 @@
-package com.bayu.instagramhomepage.ui.utils
+package com.bayu.instagramhomepage.ui.components
 
 import android.net.Uri
 import android.view.ViewGroup
@@ -61,5 +61,3 @@ fun VideoPlayer(uri: Uri) {
         onDispose { exoPlayer.release() }
     }
 }
-
-// Uri.parse("asset:///${video}")

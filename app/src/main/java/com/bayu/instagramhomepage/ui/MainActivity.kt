@@ -3,23 +3,21 @@ package com.bayu.instagramhomepage.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.bayu.instagramhomepage.ui.bottomnav.BottomBar
-import com.bayu.instagramhomepage.ui.bottomnav.BottomNavGraph
 import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Surface(color = MaterialTheme.colors.background) {
-                    MainScreen(viewModel) {
+                    MainScreen {
                         systemUiController.setStatusBarColor(it)
                     }
                 }
@@ -45,26 +43,13 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel,
     setStatusBarColor: (Color) -> Unit,
 ) {
     val navController = rememberNavController()
     val bottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden
     )
-    val isBottomSheetShow by viewModel.isBottomSheetShow.collectAsState()
-
-    LaunchedEffect(bottomSheetState.currentValue) {
-        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
-            viewModel.hideBottomSheet()
-        }
-    }
-
-    LaunchedEffect(isBottomSheetShow) {
-        if (isBottomSheetShow) {
-            bottomSheetState.show()
-        }
-    }
+    val scope = rememberCoroutineScope()
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -74,12 +59,18 @@ fun MainScreen(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
         Scaffold(
-            bottomBar = { BottomBar(navController = navController, setStatusBarColor = setStatusBarColor) }
+            bottomBar = {
+                BottomBar(
+                    navController = navController,
+                    setStatusBarColor = setStatusBarColor
+                )
+            }
         ) {
-            BottomNavGraph(
+            NavGraph(
                 navController = navController,
-                viewModel = viewModel,
-                modifier = Modifier.padding(it)
+                modifier = Modifier.padding(it),
+                onShowBottomSheet = { scope.launch { bottomSheetState.show() } },
+                onHideBottomSheet = { scope.launch { bottomSheetState.hide() } }
             )
         }
     }

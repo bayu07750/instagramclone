@@ -25,29 +25,25 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bayu.instagramhomepage.R
-import com.bayu.instagramhomepage.ui.MainViewModel
-import com.bayu.instagramhomepage.ui.theme.InstagramHomePageTheme
-
-internal val colorsInstagram = listOf(
-    Color(0xFFDD2A7B),
-    Color(0xFFFEDA77),
-    Color(0xFFF58529),
-)
+import com.bayu.instagramhomepage.ui.components.ActionIcon
+import com.bayu.instagramhomepage.ui.components.ToggleButton
+import com.bayu.instagramhomepage.ui.components.YourStory
+import com.bayu.instagramhomepage.ui.theme.colorsInstagram
+import com.bayu.instagramhomepage.ui.components.IconButton
 
 @Composable
 fun HomeScreen(
-    mainViewModel: MainViewModel = viewModel(),
+    onShowBottomSheet: () -> Unit,
+    onHideBottomSheet: () -> Unit,
 ) {
     Column {
         TopAppBar()
         HomeContent(
-            onShowBottomSheet = { mainViewModel.showBottomSheet() },
-            onHideBottomSheet = { /* TODO hide bottom sheet */ }
+            onShowBottomSheet = { onShowBottomSheet.invoke() },
+            onHideBottomSheet = { onHideBottomSheet.invoke() }
         )
     }
 }
@@ -172,40 +168,14 @@ fun PostContent(
 
 @Composable
 fun PostFooter() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Row {
-            var isButtonFavoriteChecked by remember { mutableStateOf(false) }
-            ToggleButton(
-                checkedImageVector = Icons.Outlined.Favorite,
-                unCheckedImageVector = Icons.Outlined.FavoriteBorder,
-                isChecked = isButtonFavoriteChecked,
-                onClick = { isButtonFavoriteChecked = !isButtonFavoriteChecked }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                imageVector = Icons.Outlined.ChatBubbleOutline,
-                contentDescription = null,
-                modifier = Modifier.size(28.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                imageVector = Icons.Outlined.Send,
-                contentDescription = null,
-                modifier = Modifier.size(28.dp)
-            )
-        }
-        Icon(
-            imageVector = Icons.Outlined.BookmarkBorder,
-            contentDescription = null,
-            modifier = Modifier.size(28.dp)
-        )
-    }
+    PostFooterActions()
+    PostFooterDescription()
+}
+
+@Composable
+fun PostFooterDescription() {
+    var isShowMore by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -213,8 +183,6 @@ fun PostFooter() {
                 animationSpec = tween(600),
             ),
     ) {
-        var isShowMore by remember { mutableStateOf(false) }
-
         Text(text = "1,432 likes", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(4.dp))
         Row {
@@ -281,6 +249,32 @@ fun PostFooter() {
 }
 
 @Composable
+fun PostFooterActions() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row {
+            var isButtonFavoriteChecked by remember { mutableStateOf(false) }
+            ToggleButton(
+                checkedImageVector = Icons.Outlined.Favorite,
+                unCheckedImageVector = Icons.Outlined.FavoriteBorder,
+                isChecked = isButtonFavoriteChecked,
+                onClick = { isButtonFavoriteChecked = !isButtonFavoriteChecked }
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            ActionIcon(imageVector = Icons.Outlined.ChatBubbleOutline)
+            Spacer(modifier = Modifier.width(16.dp))
+            ActionIcon(imageVector = Icons.Outlined.Send)
+        }
+        ActionIcon(imageVector = Icons.Outlined.BookmarkBorder)
+    }
+}
+
+@Composable
 fun Stories() {
     LazyRow {
         item {
@@ -326,13 +320,5 @@ fun Story(
         }
         Spacer(modifier = Modifier.height(6.dp))
         LabelStory(text = name)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    InstagramHomePageTheme {
-        HomeScreen()
     }
 }

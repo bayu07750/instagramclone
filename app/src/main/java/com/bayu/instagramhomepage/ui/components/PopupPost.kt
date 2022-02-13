@@ -1,4 +1,4 @@
-package com.bayu.instagramhomepage.ui.search
+package com.bayu.instagramhomepage.ui.components
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.R
-import com.bayu.instagramhomepage.ui.home.IconButton
 
 @Composable
 fun PopupPost(

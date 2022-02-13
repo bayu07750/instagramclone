@@ -10,10 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.GraphicEq
@@ -29,9 +26,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.bayu.instagramhomepage.ui.components.ActionIcon
+import com.bayu.instagramhomepage.ui.components.ToggleButton
+import com.bayu.instagramhomepage.ui.components.VideoPlayer
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Reel
-import com.bayu.instagramhomepage.ui.utils.VideoPlayer
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 
@@ -60,7 +59,7 @@ fun Reels(
 }
 
 @Composable
-private fun Reel(
+fun Reel(
     item: Reel
 ) {
     Box {
@@ -101,56 +100,40 @@ fun ReelActions(item: Reel) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = CenterHorizontally,
     ) {
-        Icon(
-            imageVector = Icons.Outlined.PhotoCamera,
-            contentDescription = null,
-            modifier = Modifier
-                .size(32.dp),
-        )
+        ActionIcon(imageVector = Icons.Outlined.PhotoCamera)
         Column(
             horizontalAlignment = CenterHorizontally,
         ) {
             Column {
-                Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(32.dp),
+                var isButtonFavoriteChecked by remember { mutableStateOf(false) }
+                ToggleButton(
+                    checkedImageVector = Icons.Outlined.Favorite,
+                    unCheckedImageVector = Icons.Outlined.FavoriteBorder,
+                    colorIcon = LocalContentColor.current,
+                    isChecked = isButtonFavoriteChecked,
+                    onClick = { isButtonFavoriteChecked = !isButtonFavoriteChecked }
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = item.likes,
-                    modifier = Modifier.align(CenterHorizontally)
+                    modifier = Modifier.align(CenterHorizontally),
+                    style = MaterialTheme.typography.body2,
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column {
-                Icon(
-                    imageVector = Icons.Outlined.ModeComment,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(32.dp),
-                )
+                ActionIcon(imageVector = Icons.Outlined.ModeComment)
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = item.comment,
-                    modifier = Modifier.align(CenterHorizontally)
+                    modifier = Modifier.align(CenterHorizontally),
+                    style = MaterialTheme.typography.body2,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Icon(
-                imageVector = Icons.Outlined.Send,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp),
-            )
+            ActionIcon(imageVector = Icons.Outlined.Send)
             Spacer(modifier = Modifier.height(16.dp))
-            Icon(
-                imageVector = Icons.Outlined.MoreVert,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp),
-            )
+            ActionIcon(imageVector = Icons.Outlined.MoreVert)
             Spacer(modifier = Modifier.height(16.dp))
             Surface(
                 modifier = Modifier,
