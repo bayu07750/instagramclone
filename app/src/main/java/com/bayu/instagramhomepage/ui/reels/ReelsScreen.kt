@@ -1,9 +1,12 @@
 package com.bayu.instagramhomepage.ui.reels
 
-import android.net.Uri
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,33 +17,29 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.GraphicEq
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bayu.instagramhomepage.R
+import coil.compose.rememberImagePainter
+import com.bayu.instagramhomepage.ui.utils.Data
+import com.bayu.instagramhomepage.ui.utils.Reel
 import com.bayu.instagramhomepage.ui.utils.VideoPlayer
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ReelsScreen() {
-    val reels = remember {
-        listOf(
-            Uri.parse("asset:///sd_1.mp4"),
-            Uri.parse("asset:///sd_2.mp4"),
-        )
-    }
+fun ReelsScreen(
+    reels: List<Reel> = Data.dummyDataReels,
+) {
 
     VerticalPager(
         count = reels.size,
@@ -51,7 +50,7 @@ fun ReelsScreen() {
         val reel = reels[index]
 
         Box {
-            VideoPlayer(uri = reel)
+            VideoPlayer(uri = reel.getUriVideo())
             Surface(
                 color = Color.Transparent,
                 contentColor = Color.White
@@ -62,10 +61,17 @@ fun ReelsScreen() {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom,
                 ) {
+                    var isShowMoreDescription by remember {
+                        mutableStateOf(false)
+                    }
+
                     Column(
                         modifier = Modifier
                             .padding(start = 12.dp, bottom = 12.dp, end = 32.dp, top = 24.dp)
-                            .weight(1F),
+                            .weight(1F)
+                            .animateContentSize(
+                                animationSpec = tween(400)
+                            ),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -74,7 +80,7 @@ fun ReelsScreen() {
                                 shape = CircleShape,
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.image),
+                                    painter = rememberImagePainter(data = reel.user.profile),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(30.dp),
@@ -83,7 +89,7 @@ fun ReelsScreen() {
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Kya_fry",
+                                text = reel.user.username,
                                 style = MaterialTheme.typography.subtitle2.copy(color = Color.White)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
@@ -94,7 +100,7 @@ fun ReelsScreen() {
                                 border = BorderStroke(1.dp, Color.White),
                             ) {
                                 Text(
-                                    text = "Follow",
+                                    text = if (reel.user.follow) "Unfollow" else "Follow",
                                     modifier = Modifier
                                         .padding(2.dp)
                                         .padding(horizontal = 6.dp),
@@ -106,7 +112,7 @@ fun ReelsScreen() {
 
                         val description = buildAnnotatedString {
                             withStyle(style = MaterialTheme.typography.subtitle1.toSpanStyle()) {
-                                append("My Happy Baby")
+                                append(reel.description)
                             }
                             append("  ")
                             withStyle(
@@ -116,15 +122,24 @@ fun ReelsScreen() {
                                     )
                                 ).toSpanStyle()
                             ) {
-                                append("#hellowlrd #game #music #horror")
+                                val tags = reel.tags.joinToString(" ")
+                                append(tags)
                             }
                         }
 
                         Text(
                             text = description,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            modifier = Modifier
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                ) {
+                                    isShowMoreDescription = !isShowMoreDescription
+                                },
+                            maxLines = if (isShowMoreDescription) Int.MAX_VALUE else 1,
+                            overflow = if (isShowMoreDescription) TextOverflow.Clip else TextOverflow.Ellipsis
                         )
+
                         Spacer(modifier = Modifier.height(16.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -137,7 +152,7 @@ fun ReelsScreen() {
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "kye_fry",
+                                text = reel.music.name,
                                 style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp)
                             )
                             Spacer(modifier = Modifier.width(3.dp))
@@ -149,7 +164,7 @@ fun ReelsScreen() {
                             ) { }
                             Spacer(modifier = Modifier.width(3.dp))
                             Text(
-                                text = "Original Audio",
+                                text = if (reel.music.isOriginalAudio) "Original Audio" else reel.music.author,
                                 style = MaterialTheme.typography.subtitle1
                             )
                         }
@@ -179,7 +194,7 @@ fun ReelsScreen() {
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
-                                    text = "19.1K",
+                                    text = reel.likes,
                                     modifier = Modifier.align(CenterHorizontally)
                                 )
                             }
@@ -193,7 +208,7 @@ fun ReelsScreen() {
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
-                                    text = "106",
+                                    text = reel.comment,
                                     modifier = Modifier.align(CenterHorizontally)
                                 )
                             }
@@ -218,7 +233,7 @@ fun ReelsScreen() {
                                 border = BorderStroke(2.dp, Color.White),
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.image),
+                                    painter = rememberImagePainter(data = reel.music.profile),
                                     contentDescription = null,
                                     modifier = Modifier.size(35.dp),
                                     contentScale = ContentScale.Crop

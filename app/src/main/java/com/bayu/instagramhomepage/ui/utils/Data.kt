@@ -1,5 +1,7 @@
 package com.bayu.instagramhomepage.ui.utils
 
+import android.net.Uri
+
 object Data {
 
     val dummyDataPosts: List<Post> = listOf(
@@ -221,7 +223,7 @@ data class Reel(
     val comment: String,
     val video: String
 ) {
-    fun getUriVideo(): String = "asset:///${video}"
+    fun getUriVideo(): Uri = Uri.parse("asset:///${video}")
 }
 
 data class User(
