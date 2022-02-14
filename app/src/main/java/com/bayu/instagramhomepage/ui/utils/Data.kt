@@ -1,6 +1,8 @@
 package com.bayu.instagramhomepage.ui.utils
 
 import android.net.Uri
+import androidx.annotation.DrawableRes
+import com.bayu.instagramhomepage.R
 
 object Data {
 
@@ -207,6 +209,40 @@ object Data {
             video = "sd_2.mp4",
         ),
     )
+
+    private val persons = listOf(
+        R.drawable.person_1,
+        R.drawable.person_2,
+        R.drawable.person_3,
+        R.drawable.person_4,
+    )
+
+    val dummyDataStories = listOf(
+        Story(
+            name = "Hugo First",
+            image = persons[3],
+        ),
+        Story(
+            name = "Olive Yew",
+            image = persons[2],
+        ),
+        Story(
+            name = "Aida Bugg",
+            image = persons[1],
+        ),
+        Story(
+            name = "Liz Erd",
+            image = persons[0],
+        ),
+        Story(
+            name = "Ray Sin",
+            image = persons[3],
+        ),
+        Story(
+            name = "Col Fays",
+            image = persons[2],
+        ),
+    )
 }
 
 data class Post(
@@ -237,4 +273,9 @@ data class Music(
     val author: String,
     val isOriginalAudio: Boolean,
     val profile: String,
+)
+
+data class Story(
+    val name: String,
+    @DrawableRes val image: Int,
 )

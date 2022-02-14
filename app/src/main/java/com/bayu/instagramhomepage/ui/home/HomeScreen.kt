@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,8 @@ import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.ToggleButton
 import com.bayu.instagramhomepage.ui.components.YourStory
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
+import com.bayu.instagramhomepage.ui.utils.Data
+import com.bayu.instagramhomepage.ui.utils.Story
 
 @Composable
 fun HomeScreen(
@@ -275,15 +278,17 @@ fun PostFooterActions() {
 }
 
 @Composable
-fun Stories() {
+fun Stories(
+    items: List<Story> = Data.dummyDataStories,
+) {
     LazyRow {
         item {
             YourStory()
         }
-        items(10) {
+        items(items) { item ->
             Story(
-                name = "neojapan_",
-                painter = painterResource(id = R.drawable.image)
+                name = item.name,
+                painter = painterResource(id = item.image)
             )
         }
     }
@@ -307,9 +312,8 @@ fun Story(
         ) {
             Surface(
                 modifier = Modifier
-                    .padding(4.dp),
+                    .padding(5.dp),
                 shape = CircleShape,
-//                border = BorderStroke(0.dp, Color.LightGray),
             ) {
                 Image(
                     painter = painter,
