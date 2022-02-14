@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -64,7 +65,7 @@ fun SearchBar() {
             .padding(horizontal = 12.dp)
             .padding(top = 16.dp, bottom = 8.dp),
         shape = RoundedCornerShape(8.dp),
-        color = Color(0xFFe2e8f0),
+        color = if (MaterialTheme.colors.isLight) Color(0xFFe2e8f0) else Color(0xFF1e293b),
         contentColor = Color.Black,
     ) {
         Row(
@@ -75,7 +76,8 @@ fun SearchBar() {
         ) {
             Icon(
                 imageVector = Icons.Rounded.Search,
-                contentDescription = "Search Icon"
+                contentDescription = "Search Icon",
+                tint = MaterialTheme.colors.onBackground
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(

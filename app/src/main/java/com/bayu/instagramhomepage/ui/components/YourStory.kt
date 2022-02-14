@@ -3,6 +3,7 @@ package com.bayu.instagramhomepage.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
@@ -24,8 +25,8 @@ fun YourStory() {
                 modifier = Modifier
                     .align(Alignment.BottomEnd),
                 color = Color(0xFF3b82f6),
-                contentColor = Color.White,
-                border = BorderStroke(2.dp, Color.White)
+                contentColor = MaterialTheme.colors.background,
+                border = BorderStroke(2.dp, MaterialTheme.colors.background)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,

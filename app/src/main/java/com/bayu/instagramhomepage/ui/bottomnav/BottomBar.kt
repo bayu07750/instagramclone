@@ -35,13 +35,13 @@ fun BottomBar(
     if (isReelsScreenDestination) {
         setStatusBarColor(Color.Black)
     } else {
-        setStatusBarColor(Color.White)
+        setStatusBarColor(MaterialTheme.colors.background)
     }
 
     BottomNavigation(
         modifier = Modifier,
-        backgroundColor = if (isReelsScreenDestination) MaterialTheme.colors.onBackground else MaterialTheme.colors.background,
-        contentColor = if (isReelsScreenDestination) MaterialTheme.colors.background else MaterialTheme.colors.onBackground,
+        backgroundColor = if (isReelsScreenDestination) Color.Black else MaterialTheme.colors.background,
+        contentColor = if (isReelsScreenDestination) Color.White else MaterialTheme.colors.onBackground,
         elevation = 0.dp,
     ) {
         screens.forEach { screen ->

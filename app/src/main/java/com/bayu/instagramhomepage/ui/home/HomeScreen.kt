@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -29,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.components.ActionIcon
+import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.ToggleButton
 import com.bayu.instagramhomepage.ui.components.YourStory
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
-import com.bayu.instagramhomepage.ui.components.IconButton
 
 @Composable
 fun HomeScreen(
@@ -189,7 +188,7 @@ fun PostFooterDescription() {
             val description = buildAnnotatedString {
                 withStyle(
                     SpanStyle(
-                        color = Color.Black,
+                        color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp
                     )
@@ -262,6 +261,7 @@ fun PostFooterActions() {
             ToggleButton(
                 checkedImageVector = Icons.Outlined.Favorite,
                 unCheckedImageVector = Icons.Outlined.FavoriteBorder,
+                colorIcon = LocalContentColor.current,
                 isChecked = isButtonFavoriteChecked,
                 onClick = { isButtonFavoriteChecked = !isButtonFavoriteChecked }
             )
@@ -307,9 +307,9 @@ fun Story(
         ) {
             Surface(
                 modifier = Modifier
-                    .padding(6.dp),
+                    .padding(4.dp),
                 shape = CircleShape,
-                border = BorderStroke(1.dp, Color.LightGray),
+//                border = BorderStroke(0.dp, Color.LightGray),
             ) {
                 Image(
                     painter = painter,

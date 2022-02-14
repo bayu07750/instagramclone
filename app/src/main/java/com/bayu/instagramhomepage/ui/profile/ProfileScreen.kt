@@ -1,16 +1,30 @@
 package com.bayu.instagramhomepage.ui.profile
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.bayu.instagramhomepage.ui.MainViewModel
 
 @Composable
-fun ProfileScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Profile".uppercase(), style = MaterialTheme.typography.h3)
+fun ProfileScreen(
+    viewModel: MainViewModel
+) {
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Switch(checked = isDarkMode, onCheckedChange = viewModel::setIsDarkModel)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = "Dark Mode", textAlign = TextAlign.Center)
     }
 }

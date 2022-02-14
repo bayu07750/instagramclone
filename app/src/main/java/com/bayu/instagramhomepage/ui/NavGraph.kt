@@ -15,6 +15,7 @@ import com.bayu.instagramhomepage.ui.shopping.ShoppingScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     onShowBottomSheet: () -> Unit,
     onHideBottomSheet: () -> Unit,
@@ -40,7 +41,7 @@ fun NavGraph(
             ShoppingScreen()
         }
         composable(route = BottomBarScreen.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(viewModel = viewModel)
         }
     }
 }
