@@ -60,18 +60,18 @@ fun ColumnScope.BottomSheetContent() {
     Text(
         text = "Why you're seeing this post",
         modifier = horizontalPadding,
-        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+        style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onBackground)
     )
     Divider()
     Text(
         text = "Hide",
         modifier = horizontalPadding,
-        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+        style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onBackground)
     )
     Text(
         text = "Unfollow",
         modifier = horizontalPadding,
-        style = MaterialTheme.typography.subtitle1.copy(color = Color.Black)
+        style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onBackground)
     )
     Spacer(modifier = Modifier.height(64.dp))
 }
@@ -87,8 +87,8 @@ fun CircleButton(
         Surface(
             modifier = Modifier,
             shape = CircleShape,
-            color = Color.White,
-            contentColor = if (isImportant) Color.Red else Color.Black,
+            color = MaterialTheme.colors.background,
+            contentColor = if (isImportant) Color.Red else MaterialTheme.colors.onBackground,
             border = if (isImportant) BorderStroke(1.dp, Color.Red) else BorderStroke(
                 2.dp,
                 Color.Gray
