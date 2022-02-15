@@ -36,7 +36,7 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, com.google.accompanist.pager.ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
 fun ProfileUserScreen() {
     val pagerState = rememberPagerState()
@@ -145,7 +145,7 @@ fun InfoUserChannel() {
                         shape = CircleShape,
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.person_1),
+                            painter = painterResource(id = R.drawable.image),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(65.dp),
@@ -214,7 +214,7 @@ fun InfoUserDescription() {
 fun InfoUser() {
     Row(
         modifier = Modifier
-            .padding(top = 16.dp, bottom = 12.dp)
+            .padding(top = 8.dp, bottom = 12.dp)
             .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

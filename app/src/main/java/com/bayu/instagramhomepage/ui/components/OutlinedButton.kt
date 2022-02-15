@@ -7,7 +7,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -21,7 +20,7 @@ fun OutlinedButton(
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.onBackground,
-        border = BorderStroke(1.dp, Color.Black.copy(alpha = .1F))
+        border = BorderStroke(1.dp, MaterialTheme.colors.onBackground.copy(alpha = 0.1F))
     ) {
         Text(
             text = text,
