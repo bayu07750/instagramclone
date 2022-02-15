@@ -97,7 +97,7 @@ fun SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
 @Composable
 fun ExplorePosts(
     listPosts: List<Post> = Data.dummyDataPosts,
-    onLongPressPost: (Boolean, String) -> Unit,
+    onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
@@ -114,7 +114,7 @@ fun ExplorePosts(
 @Composable
 fun ExplorePost(
     post: Post,
-    onLongPressPost: (Boolean, String) -> Unit,
+    onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     Surface(
         contentColor = Color.White,
@@ -155,11 +155,11 @@ fun ExplorePost(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                onLongPressPost.invoke(true, post.image)
+                                onLongPressPost?.invoke(true, post.image)
                             },
                             onPress = {
                                 awaitRelease()
-                                onLongPressPost.invoke(false, "")
+                                onLongPressPost?.invoke(false, "")
                             },
                         )
                     },

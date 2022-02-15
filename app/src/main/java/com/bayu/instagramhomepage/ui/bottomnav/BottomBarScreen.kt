@@ -47,4 +47,11 @@ sealed class BottomBarScreen(
         unSelectedIcon = Icons.Outlined.AccountCircle
     )
 
+    object ProfileUser : BottomBarScreen(
+        route = "profile_user",
+        title = "Profile User",
+        selectedIcon = Icons.Rounded.AccountCircle, // not use
+        unSelectedIcon = Icons.Outlined.AccountCircle, // not use
+    )
+
 }

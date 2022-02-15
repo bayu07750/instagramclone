@@ -27,7 +27,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.bayu.instagramhomepage.R
+import com.bayu.instagramhomepage.ui.bottomnav.BottomBarScreen
 import com.bayu.instagramhomepage.ui.components.ActionIcon
 import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.ToggleButton
@@ -38,6 +40,7 @@ import com.bayu.instagramhomepage.ui.utils.Story
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     onShowBottomSheet: () -> Unit,
     onHideBottomSheet: () -> Unit,
 ) {
@@ -45,7 +48,8 @@ fun HomeScreen(
         TopAppBar()
         HomeContent(
             onShowBottomSheet = { onShowBottomSheet.invoke() },
-            onHideBottomSheet = { onHideBottomSheet.invoke() }
+            onHideBottomSheet = { onHideBottomSheet.invoke() },
+            navController = navController,
         )
     }
 }
@@ -64,6 +68,7 @@ fun HomeContent(
     onShowBottomSheet: () -> Unit,
     onHideBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -77,6 +82,9 @@ fun HomeContent(
         items(20) {
             Post(
                 onShowBottomSheet = onShowBottomSheet,
+                onClickProfile = {
+                    navController.navigate(BottomBarScreen.ProfileUser.route)
+                },
             )
         }
     }
@@ -85,6 +93,7 @@ fun HomeContent(
 @Composable
 fun Post(
     onShowBottomSheet: () -> Unit,
+    onClickProfile: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -96,6 +105,7 @@ fun Post(
             onMorePostClicked = onShowBottomSheet,
             name = "stevdza_san",
             image = painterResource(id = R.drawable.image),
+            onClickProfile = onClickProfile,
         )
         PostContent(
             image = painterResource(id = R.drawable.image)
@@ -106,9 +116,10 @@ fun Post(
 
 @Composable
 fun PostHeader(
-    onMorePostClicked: () -> Unit,
     name: String,
     image: Painter,
+    onClickProfile: () -> Unit,
+    onMorePostClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -119,6 +130,8 @@ fun PostHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
+            modifier = Modifier
+                .clickable { onClickProfile.invoke() },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             CircleBackground(

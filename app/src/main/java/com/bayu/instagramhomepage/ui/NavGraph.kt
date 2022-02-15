@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.bayu.instagramhomepage.ui.bottomnav.BottomBarScreen
 import com.bayu.instagramhomepage.ui.home.HomeScreen
 import com.bayu.instagramhomepage.ui.profile.ProfileScreen
+import com.bayu.instagramhomepage.ui.profileuser.ProfileUserScreen
 import com.bayu.instagramhomepage.ui.reels.ReelsScreen
 import com.bayu.instagramhomepage.ui.search.SearchScreen
 import com.bayu.instagramhomepage.ui.shopping.ShoppingScreen
@@ -27,6 +28,7 @@ fun NavGraph(
     ) {
         composable(route = BottomBarScreen.Home.route) {
             HomeScreen(
+                navController = navController,
                 onShowBottomSheet = onShowBottomSheet,
                 onHideBottomSheet = onHideBottomSheet,
             )
@@ -42,6 +44,9 @@ fun NavGraph(
         }
         composable(route = BottomBarScreen.Profile.route) {
             ProfileScreen(viewModel = viewModel)
+        }
+        composable(route = BottomBarScreen.ProfileUser.route) {
+            ProfileUserScreen()
         }
     }
 }
