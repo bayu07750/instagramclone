@@ -103,7 +103,7 @@ fun Post(
     ) {
         PostHeader(
             onMorePostClicked = onShowBottomSheet,
-            name = "stevdza_san",
+            name = "Harriet Upp",
             image = painterResource(id = R.drawable.image),
             onClickProfile = onClickProfile,
         )
@@ -209,7 +209,7 @@ fun PostFooterDescription() {
                         fontSize = 14.sp
                     )
                 ) {
-                    append("samehadaku.care")
+                    append("harriet_upp")
                 }
                 append(" ")
                 append("is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.")

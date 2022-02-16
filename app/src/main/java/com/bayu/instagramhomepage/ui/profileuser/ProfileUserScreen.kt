@@ -269,7 +269,7 @@ fun ProfileUserTopBar() {
     TopAppBar(
         title = {
             Text(
-                text = "neojapan_",
+                text = "Harriet Upp",
                 style = LocalTextStyle.current.copy(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.onBackground
