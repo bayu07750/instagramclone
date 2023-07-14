@@ -1,7 +1,6 @@
 package com.bayu.instagramhomepage.ui.profileuser
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.components.IconButton
@@ -36,7 +36,13 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
+@Preview
+@Composable
+fun ProfileUserScreenPreview() {
+    ProfileUserScreen()
+}
+
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProfileUserScreen() {
     val pagerState = rememberPagerState()
