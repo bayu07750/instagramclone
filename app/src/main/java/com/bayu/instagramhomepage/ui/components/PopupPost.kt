@@ -19,9 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.bayu.instagramhomepage.R
 
 @Composable
@@ -73,10 +76,11 @@ fun PopupPost(
                             style = MaterialTheme.typography.subtitle2
                         )
                     }
-                    Image(
-                        painter = rememberImagePainter(data = image) {
-                            crossfade(true)
-                        },
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(image)
+                            .crossfade(true)
+                            .build(),
                         contentDescription = null,
                         modifier = Modifier.fillMaxWidth(),
                         contentScale = ContentScale.Crop
