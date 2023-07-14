@@ -1,13 +1,12 @@
 package com.bayu.instagramhomepage.ui.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -21,10 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.bayu.instagramhomepage.ui.components.PopupPost
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Post
@@ -34,7 +34,6 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen() {
     var isPopupPostVisible by remember { mutableStateOf(false) }
@@ -93,14 +92,13 @@ fun SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
     ExplorePosts(onLongPressPost = onLongPressPost)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExplorePosts(
     listPosts: List<Post> = Data.dummyDataPosts,
     onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
@@ -110,7 +108,6 @@ fun ExplorePosts(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ExplorePost(
     post: Post,
@@ -123,22 +120,20 @@ fun ExplorePost(
             modifier = Modifier,
             contentAlignment = Alignment.TopEnd,
         ) {
-            val imagePainter = rememberImagePainter(post.image) {
-                crossfade(true)
-            }
+            val imagePainter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(post.image)
+                    .crossfade(true)
+                    .build(),
+            )
 
             var isLoadImageSuccessfully by remember { mutableStateOf(false) }
 
             LaunchedEffect(imagePainter.state) {
                 when (imagePainter.state) {
-                    is ImagePainter.State.Loading -> {
-                        isLoadImageSuccessfully = false
-                    }
-                    is ImagePainter.State.Success -> {
-                        isLoadImageSuccessfully = true
-                    }
-                    else -> { /* TODO handle other state here */
-                    }
+                    is AsyncImagePainter.State.Loading -> isLoadImageSuccessfully = false
+                    is AsyncImagePainter.State.Success -> isLoadImageSuccessfully = true
+                    else -> {}
                 }
             }
 
@@ -175,6 +170,7 @@ fun ExplorePost(
                                 .padding(top = 4.dp, end = 4.dp)
                         )
                     }
+
                     TypePost.Photo -> {}
                 }
             }
