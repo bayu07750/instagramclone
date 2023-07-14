@@ -258,7 +258,7 @@ fun PostFooterDescription() {
                 fontWeight = FontWeight.W500,
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "2 days aog", fontSize = 12.sp)
+            Text(text = "2 days ago", fontSize = 12.sp)
         }
     }
 }
