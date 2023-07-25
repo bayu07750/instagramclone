@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import coil.size.Scale
 import com.bayu.instagramhomepage.ui.components.PopupPost
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Post
@@ -105,9 +106,10 @@ fun ExplorePosts(
     onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(120.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(listPosts) { post ->
             ExplorePost(post = post, onLongPressPost = onLongPressPost)
@@ -130,6 +132,7 @@ fun ExplorePost(
             val imagePainter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(post.image)
+                    .scale(Scale.FILL)
                     .crossfade(true)
                     .build(),
             )
@@ -148,8 +151,7 @@ fun ExplorePost(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .widthIn(min = 120.dp)
-                    .heightIn(min = 120.dp)
+                    .aspectRatio(1f/1f)
                     .placeholder(
                         visible = !isLoadImageSuccessfully,
                         highlight = PlaceholderHighlight.shimmer(),
