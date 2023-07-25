@@ -9,7 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -30,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.ui.components.ActionIcon
 import com.bayu.instagramhomepage.ui.components.ToggleButton
-import com.bayu.instagramhomepage.ui.components.VideoPlayer
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Reel
 
@@ -48,24 +49,36 @@ fun ReelsScreen(
 fun Reels(
     items: List<Reel>
 ) {
+    val pagerState = rememberPagerState()
+
     VerticalPager(
+        state = pagerState,
         pageCount = items.size,
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),
+        key = { it },
+        beyondBoundsPageCount = 1,
     ) { index ->
         val reel = items[index]
 
-        Reel(reel)
+        Reel(index, reel, pagerState)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Reel(
-    item: Reel
+    index: Int,
+    item: Reel,
+    pagerState: PagerState,
 ) {
     Box {
-        VideoPlayer(uri = item.getUriVideo())
+        Player(
+            index = index,
+            uri = item.getUriVideo(),
+            pagerState = pagerState,
+        )
         Surface(
             color = Color.Transparent,
             contentColor = Color.White
