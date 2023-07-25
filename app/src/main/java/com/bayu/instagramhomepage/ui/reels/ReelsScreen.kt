@@ -3,11 +3,13 @@ package com.bayu.instagramhomepage.ui.reels
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -31,8 +33,6 @@ import com.bayu.instagramhomepage.ui.components.ToggleButton
 import com.bayu.instagramhomepage.ui.components.VideoPlayer
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Reel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.VerticalPager
 
 @Composable
 fun ReelsScreen(
@@ -43,13 +43,13 @@ fun ReelsScreen(
     Reels(items = reels)
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Reels(
     items: List<Reel>
 ) {
     VerticalPager(
-        count = items.size,
+        pageCount = items.size,
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),

@@ -1,9 +1,13 @@
 package com.bayu.instagramhomepage.ui.profileuser
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -28,14 +32,10 @@ import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.OutlinedButton
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileUserScreen() {
     val pagerState = rememberPagerState()
@@ -72,7 +72,7 @@ fun ProfileUserScreen() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun InfoUserContent(
     pagerState: PagerState,
@@ -105,7 +105,7 @@ fun InfoUserContent(
         }
     }
     HorizontalPager(
-        count = 4,
+        pageCount = 4,
         state = pagerState,
     ) { page: Int ->
         when (page) {
