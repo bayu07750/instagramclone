@@ -36,7 +36,9 @@ import com.google.accompanist.pager.VerticalPager
 
 @Composable
 fun ReelsScreen(
-    reels: List<Reel> = Data.dummyDataReels,
+    reels: List<Reel> = remember {
+        Data.dummyDataReels
+    },
 ) {
     Reels(items = reels)
 }

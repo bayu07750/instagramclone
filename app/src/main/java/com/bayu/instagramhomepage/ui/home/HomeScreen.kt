@@ -47,8 +47,8 @@ fun HomeScreen(
     Column {
         TopAppBar()
         HomeContent(
-            onShowBottomSheet = { onShowBottomSheet.invoke() },
-            onHideBottomSheet = { onHideBottomSheet.invoke() },
+            onShowBottomSheet = onShowBottomSheet,
+            onHideBottomSheet = onHideBottomSheet,
             navController = navController,
         )
     }
@@ -292,7 +292,9 @@ fun PostFooterActions() {
 
 @Composable
 fun Stories(
-    items: List<Story> = Data.dummyDataStories,
+    items: List<Story> = remember {
+        Data.dummyDataStories
+    },
 ) {
     LazyRow {
         item {
