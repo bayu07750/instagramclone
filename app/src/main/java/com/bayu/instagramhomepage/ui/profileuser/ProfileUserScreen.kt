@@ -4,6 +4,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -29,12 +32,9 @@ import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.OutlinedButton
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 @Preview
 @Composable
@@ -42,9 +42,9 @@ fun ProfileUserScreenPreview() {
     ProfileUserScreen()
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProfileUserScreen() {
+fun ProfileUserScreen(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState()
     val listTabs = remember {
         listOf(
@@ -57,6 +57,7 @@ fun ProfileUserScreen() {
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             ProfileUserTopBar()
         },
@@ -79,16 +80,17 @@ fun ProfileUserScreen() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun InfoUserContent(
     pagerState: PagerState,
     listTabs: List<ImageVector>,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier,
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        modifier = Modifier,
+        modifier = modifier,
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.onBackground
     ) {
@@ -112,7 +114,7 @@ fun InfoUserContent(
         }
     }
     HorizontalPager(
-        count = 4,
+        pageCount = 4,
         state = pagerState,
     ) { page: Int ->
         when (page) {
@@ -125,9 +127,9 @@ fun InfoUserContent(
 }
 
 @Composable
-fun InfoUserChannel() {
+fun InfoUserChannel(modifier: Modifier = Modifier) {
     LazyRow(
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 20.dp)
     ) {
         items(6) { index ->
@@ -170,9 +172,9 @@ fun InfoUserChannel() {
 }
 
 @Composable
-fun InfoUserDescription() {
+fun InfoUserDescription(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 12.dp)
     ) {
         val description = buildAnnotatedString {
@@ -217,9 +219,9 @@ fun InfoUserDescription() {
 }
 
 @Composable
-fun InfoUser() {
+fun InfoUser(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 8.dp, bottom = 12.dp)
             .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -271,7 +273,7 @@ fun InfoUser() {
 }
 
 @Composable
-fun ProfileUserTopBar() {
+fun ProfileUserTopBar(modifier: Modifier = Modifier) {
     TopAppBar(
         title = {
             Text(
@@ -282,7 +284,7 @@ fun ProfileUserTopBar() {
                 )
             )
         },
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             IconButton(imageVector = Icons.Rounded.ArrowBack)
         },

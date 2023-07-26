@@ -1,6 +1,8 @@
 package com.bayu.instagramhomepage.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,7 +21,6 @@ fun NavGraph(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     onShowBottomSheet: () -> Unit,
-    onHideBottomSheet: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -28,9 +29,10 @@ fun NavGraph(
     ) {
         composable(route = BottomBarScreen.Home.route) {
             HomeScreen(
-                navController = navController,
+                onProfileClicked = {
+                    navController.navigate(BottomBarScreen.ProfileUser.route)
+                },
                 onShowBottomSheet = onShowBottomSheet,
-                onHideBottomSheet = onHideBottomSheet,
             )
         }
         composable(route = BottomBarScreen.Search.route) {
@@ -43,7 +45,8 @@ fun NavGraph(
             ShoppingScreen()
         }
         composable(route = BottomBarScreen.Profile.route) {
-            ProfileScreen(viewModel = viewModel)
+            val isDarkMode by viewModel.isDarkMode.collectAsState()
+            ProfileScreen(isDarkMode = isDarkMode, onDarkModeChanged = viewModel::setIsDarkModel)
         }
         composable(route = BottomBarScreen.ProfileUser.route) {
             ProfileUserScreen()

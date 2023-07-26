@@ -3,11 +3,15 @@ package com.bayu.instagramhomepage.ui.reels
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -28,42 +32,56 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.bayu.instagramhomepage.ui.components.ActionIcon
 import com.bayu.instagramhomepage.ui.components.ToggleButton
-import com.bayu.instagramhomepage.ui.components.VideoPlayer
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Reel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.VerticalPager
 
 @Composable
 fun ReelsScreen(
-    reels: List<Reel> = Data.dummyDataReels,
+    modifier: Modifier = Modifier,
+    reels: List<Reel> = remember {
+        Data.dummyDataReels
+    },
 ) {
-    Reels(items = reels)
+    Reels(items = reels, modifier = modifier)
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Reels(
-    items: List<Reel>
+    items: List<Reel>,
+    modifier: Modifier = Modifier,
 ) {
+    val pagerState = rememberPagerState()
+
     VerticalPager(
-        count = items.size,
-        modifier = Modifier
+        state = pagerState,
+        pageCount = items.size,
+        modifier = modifier
             .fillMaxSize()
             .background(Color.Black),
+        key = { it },
+        beyondBoundsPageCount = 1,
     ) { index ->
         val reel = items[index]
 
-        Reel(reel)
+        Reel(index, reel, pagerState)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Reel(
-    item: Reel
+    index: Int,
+    item: Reel,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
-        VideoPlayer(uri = item.getUriVideo())
+    Box(modifier = modifier) {
+        Player(
+            index = index,
+            uri = item.getUriVideo(),
+            pagerState = pagerState,
+        )
         Surface(
             color = Color.Transparent,
             contentColor = Color.White
@@ -92,9 +110,9 @@ fun Reel(
 }
 
 @Composable
-fun ReelActions(item: Reel) {
+fun ReelActions(item: Reel, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 24.dp, end = 12.dp, bottom = 12.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -156,9 +174,10 @@ fun RowScope.ReelInfo(
     item: Reel,
     isShowMoreDescription: Boolean,
     onIsShowMoreDescriptionChange: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 12.dp, bottom = 12.dp, end = 32.dp, top = 24.dp)
             .weight(1F)
             .animateContentSize(
@@ -180,9 +199,10 @@ fun RowScope.ReelInfo(
 }
 
 @Composable
-fun ReelInfoMusic(item: Reel) {
+fun ReelInfoMusic(item: Reel, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         Icon(
             imageVector = Icons.Rounded.GraphicEq,
@@ -215,6 +235,7 @@ fun ReelInfoDescription(
     item: Reel,
     isShowMoreDescription: Boolean,
     onIsShowMoreDescriptionChange: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val description = buildAnnotatedString {
         withStyle(style = MaterialTheme.typography.subtitle1.toSpanStyle()) {
@@ -235,7 +256,7 @@ fun ReelInfoDescription(
 
     Text(
         text = description,
-        modifier = Modifier
+        modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -248,9 +269,10 @@ fun ReelInfoDescription(
 }
 
 @Composable
-fun ReelInfoUser(item: Reel) {
+fun ReelInfoUser(item: Reel, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         Surface(
             shape = CircleShape,

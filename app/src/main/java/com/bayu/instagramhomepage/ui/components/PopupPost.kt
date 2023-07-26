@@ -1,8 +1,6 @@
 package com.bayu.instagramhomepage.ui.components
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -23,24 +21,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.bayu.instagramhomepage.R
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PopupPost(
     isPopupPostVisible: Boolean,
     image: String,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         AnimatedVisibility(
             visible = isPopupPostVisible,
-            enter = fadeIn() + expandIn(animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)),
-            exit = shrinkOut() + fadeOut(),
+            enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut(),
         ) {
             Surface(
                 modifier = Modifier
@@ -82,7 +81,8 @@ fun PopupPost(
                             .crossfade(true)
                             .build(),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .aspectRatio(1f/1f),
                         contentScale = ContentScale.Crop
                     )
                     Row(

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.bayu.instagramhomepage"
-        minSdk 21
+        minSdk 27
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -22,8 +22,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -73,7 +74,7 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation 'com.google.accompanist:accompanist-placeholder-material:0.24.1-alpha'
-    implementation 'com.google.accompanist:accompanist-pager:0.24.2-alpha'
 
-    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
+    implementation 'androidx.media3:media3-exoplayer:1.1.0'
+    implementation 'androidx.media3:media3-ui:1.1.0'
 }

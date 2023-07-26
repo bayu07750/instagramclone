@@ -15,9 +15,11 @@ import com.bayu.instagramhomepage.ui.home.CircleBackground
 import com.bayu.instagramhomepage.ui.home.LabelStory
 
 @Composable
-fun YourStory() {
+fun AddStory(
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier.padding(start = 16.dp, end = 8.dp)
+        modifier = modifier.padding(start = 16.dp, end = 8.dp)
     ) {
         Box {
             CircleBackground(modifier = Modifier.size(75.dp))

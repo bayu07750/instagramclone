@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import coil.size.Scale
 import com.bayu.instagramhomepage.ui.components.PopupPost
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Post
@@ -42,11 +43,11 @@ fun SearchScreenPreview() {
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
-fun SearchScreen() {
+fun SearchScreen(modifier: Modifier = Modifier) {
     var isPopupPostVisible by remember { mutableStateOf(false) }
     var imageForPopupPost by remember { mutableStateOf("") }
 
-    Box {
+    Box(modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,9 +66,9 @@ fun SearchScreen() {
 }
 
 @Composable
-fun SearchBar() {
+fun SearchBar(modifier: Modifier = Modifier) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 12.dp)
             .padding(top = 16.dp, bottom = 8.dp),
         shape = RoundedCornerShape(8.dp),
@@ -95,19 +96,25 @@ fun SearchBar() {
 }
 
 @Composable
-fun SearchContent(onLongPressPost: (Boolean, String) -> Unit) {
-    ExplorePosts(onLongPressPost = onLongPressPost)
+fun SearchContent(
+    modifier: Modifier = Modifier,
+    onLongPressPost: (Boolean, String) -> Unit,
+) {
+    ExplorePosts(modifier = modifier,onLongPressPost = onLongPressPost)
 }
 
 @Composable
 fun ExplorePosts(
+    modifier: Modifier = Modifier,
     listPosts: List<Post> = Data.dummyDataPosts,
     onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        modifier = modifier,
+        columns = GridCells.Adaptive(120.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(listPosts) { post ->
             ExplorePost(post = post, onLongPressPost = onLongPressPost)
@@ -118,10 +125,12 @@ fun ExplorePosts(
 @Composable
 fun ExplorePost(
     post: Post,
+    modifier: Modifier = Modifier,
     onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     Surface(
         contentColor = Color.White,
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier,
@@ -130,6 +139,7 @@ fun ExplorePost(
             val imagePainter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(post.image)
+                    .scale(Scale.FILL)
                     .crossfade(true)
                     .build(),
             )
@@ -148,8 +158,7 @@ fun ExplorePost(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .widthIn(min = 120.dp)
-                    .heightIn(min = 120.dp)
+                    .aspectRatio(1f/1f)
                     .placeholder(
                         visible = !isLoadImageSuccessfully,
                         highlight = PlaceholderHighlight.shimmer(),
