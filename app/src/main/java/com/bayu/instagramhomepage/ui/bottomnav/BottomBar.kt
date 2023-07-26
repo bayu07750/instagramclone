@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun BottomBar(
     navController: NavHostController,
     setStatusBarColor: (Color) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val screens = listOf(
         BottomBarScreen.Home,
@@ -41,7 +42,7 @@ fun BottomBar(
     }
 
     BottomNavigation(
-        modifier = Modifier,
+        modifier = modifier,
         backgroundColor = if (isReelsScreenDestination) Color.Black else MaterialTheme.colors.background,
         contentColor = if (isReelsScreenDestination) Color.White else MaterialTheme.colors.onBackground,
         elevation = 0.dp,

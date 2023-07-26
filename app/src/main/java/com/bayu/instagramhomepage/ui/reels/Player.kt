@@ -34,6 +34,7 @@ fun Player(
     val mediaItem: MediaItem by remember(uri) { mutableStateOf(MediaItem.fromUri(uri)) }
 
     Player(mediaItem = mediaItem) { exoPlayer, releaseFunc ->
+
         LaunchedEffect(key1 = pagerState, block = {
             combine(
                 flow = snapshotFlow { pagerState.currentPageOffsetFraction },

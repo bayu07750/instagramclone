@@ -26,7 +26,8 @@ fun ToggleButton(
     unCheckedImageVector: ImageVector,
     colorIcon: Color = Color.Black,
     isChecked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val transition = updateTransition(targetState = isChecked, label = "Checked Button")
 
@@ -60,7 +61,7 @@ fun ToggleButton(
     Icon(
         imageVector = if (isChecked) checkedImageVector else unCheckedImageVector,
         contentDescription = null,
-        modifier = Modifier
+        modifier = modifier
             .clickable(
                 interactionSource = remember {
                     MutableInteractionSource()

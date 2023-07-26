@@ -37,24 +37,26 @@ import com.bayu.instagramhomepage.ui.utils.Reel
 
 @Composable
 fun ReelsScreen(
+    modifier: Modifier = Modifier,
     reels: List<Reel> = remember {
         Data.dummyDataReels
     },
 ) {
-    Reels(items = reels)
+    Reels(items = reels, modifier = modifier)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Reels(
-    items: List<Reel>
+    items: List<Reel>,
+    modifier: Modifier = Modifier,
 ) {
     val pagerState = rememberPagerState()
 
     VerticalPager(
         state = pagerState,
         pageCount = items.size,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.Black),
         key = { it },
@@ -72,8 +74,9 @@ fun Reel(
     index: Int,
     item: Reel,
     pagerState: PagerState,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(modifier = modifier) {
         Player(
             index = index,
             uri = item.getUriVideo(),
@@ -107,9 +110,9 @@ fun Reel(
 }
 
 @Composable
-fun ReelActions(item: Reel) {
+fun ReelActions(item: Reel, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 24.dp, end = 12.dp, bottom = 12.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -171,9 +174,10 @@ fun RowScope.ReelInfo(
     item: Reel,
     isShowMoreDescription: Boolean,
     onIsShowMoreDescriptionChange: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 12.dp, bottom = 12.dp, end = 32.dp, top = 24.dp)
             .weight(1F)
             .animateContentSize(
@@ -195,9 +199,10 @@ fun RowScope.ReelInfo(
 }
 
 @Composable
-fun ReelInfoMusic(item: Reel) {
+fun ReelInfoMusic(item: Reel, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         Icon(
             imageVector = Icons.Rounded.GraphicEq,
@@ -230,6 +235,7 @@ fun ReelInfoDescription(
     item: Reel,
     isShowMoreDescription: Boolean,
     onIsShowMoreDescriptionChange: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val description = buildAnnotatedString {
         withStyle(style = MaterialTheme.typography.subtitle1.toSpanStyle()) {
@@ -250,7 +256,7 @@ fun ReelInfoDescription(
 
     Text(
         text = description,
-        modifier = Modifier
+        modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -263,9 +269,10 @@ fun ReelInfoDescription(
 }
 
 @Composable
-fun ReelInfoUser(item: Reel) {
+fun ReelInfoUser(item: Reel, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         Surface(
             shape = CircleShape,

@@ -10,8 +10,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.bayu.instagramhomepage.ui.search.ExplorePosts
 
 @Composable
-fun Collections() {
-    ExplorePosts()
+fun Collections(modifier: Modifier = Modifier) {
+    ExplorePosts(modifier = modifier)
 }
 
 @Composable

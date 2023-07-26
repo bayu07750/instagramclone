@@ -29,9 +29,10 @@ import com.bayu.instagramhomepage.R
 fun PopupPost(
     isPopupPostVisible: Boolean,
     image: String,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {

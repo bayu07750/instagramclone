@@ -16,8 +16,8 @@ fun ShoppingScreenPreview() {
 }
 
 @Composable
-fun ShoppingScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun ShoppingScreen(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "Shopping".uppercase(), style = MaterialTheme.typography.h3)
     }
 }

@@ -5,15 +5,41 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.AddBox
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Send
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,36 +53,35 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.bayu.instagramhomepage.R
-import com.bayu.instagramhomepage.ui.bottomnav.BottomBarScreen
 import com.bayu.instagramhomepage.ui.components.ActionIcon
+import com.bayu.instagramhomepage.ui.components.AddStory
 import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.ToggleButton
-import com.bayu.instagramhomepage.ui.components.YourStory
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
 import com.bayu.instagramhomepage.ui.utils.Data
 import com.bayu.instagramhomepage.ui.utils.Story
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    onShowBottomSheet: () -> Unit,
-    onHideBottomSheet: () -> Unit,
+    modifier: Modifier = Modifier,
+    onProfileClicked: () -> Unit = {},
+    onShowBottomSheet: () -> Unit = {},
 ) {
-    Column {
+    Column(modifier = modifier) {
         TopAppBar()
         HomeContent(
             onShowBottomSheet = onShowBottomSheet,
-            onHideBottomSheet = onHideBottomSheet,
-            navController = navController,
+            onProfileClicked = onProfileClicked
         )
     }
 }
 
 @Composable
-fun TopAppBar() {
-    AppBar {
+fun TopAppBar(
+    modifier: Modifier = Modifier,
+) {
+    AppBar(modifier = modifier) {
         IconButton(imageVector = Icons.Outlined.AddBox)
         IconButton(imageVector = Icons.Outlined.FavoriteBorder)
         IconButton(imageVector = Icons.Outlined.ChatBubbleOutline)
@@ -66,9 +91,8 @@ fun TopAppBar() {
 @Composable
 fun HomeContent(
     onShowBottomSheet: () -> Unit,
-    onHideBottomSheet: () -> Unit,
+    onProfileClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    navController: NavController,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -82,9 +106,7 @@ fun HomeContent(
         items(20) {
             Post(
                 onShowBottomSheet = onShowBottomSheet,
-                onClickProfile = {
-                    navController.navigate(BottomBarScreen.ProfileUser.route)
-                },
+                onClickProfile = onProfileClicked,
             )
         }
     }
@@ -120,9 +142,10 @@ fun PostHeader(
     image: Painter,
     onClickProfile: () -> Unit,
     onMorePostClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .padding(start = 16.dp, end = 0.dp),
@@ -131,7 +154,13 @@ fun PostHeader(
     ) {
         Row(
             modifier = Modifier
-                .clickable { onClickProfile.invoke() },
+                .clickable(
+                    interactionSource = remember {
+                        MutableInteractionSource()
+                    },
+                    indication = null,
+                    onClick = onClickProfile
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             CircleBackground(
@@ -188,11 +217,13 @@ fun PostFooter() {
 }
 
 @Composable
-fun PostFooterDescription() {
+fun PostFooterDescription(
+    modifier: Modifier = Modifier,
+) {
     var isShowMore by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
             .animateContentSize(
                 animationSpec = tween(600),
@@ -258,15 +289,17 @@ fun PostFooterDescription() {
                 fontWeight = FontWeight.W500,
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "2 days aog", fontSize = 12.sp)
+            Text(text = "2 days ago", fontSize = 12.sp)
         }
     }
 }
 
 @Composable
-fun PostFooterActions() {
+fun PostFooterActions(
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -292,13 +325,12 @@ fun PostFooterActions() {
 
 @Composable
 fun Stories(
-    items: List<Story> = remember {
-        Data.dummyDataStories
-    },
+    modifier: Modifier = Modifier,
+    items: List<Story> = remember { Data.dummyDataStories },
 ) {
-    LazyRow {
+    LazyRow(modifier = modifier) {
         item {
-            YourStory()
+            AddStory()
         }
         items(items) { item ->
             Story(

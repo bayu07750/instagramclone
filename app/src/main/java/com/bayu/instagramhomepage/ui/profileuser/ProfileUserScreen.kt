@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProfileUserScreen() {
+fun ProfileUserScreen(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState()
     val listTabs = remember {
         listOf(
@@ -50,6 +50,7 @@ fun ProfileUserScreen() {
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             ProfileUserTopBar()
         },
@@ -77,11 +78,12 @@ fun ProfileUserScreen() {
 fun InfoUserContent(
     pagerState: PagerState,
     listTabs: List<ImageVector>,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier,
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        modifier = Modifier,
+        modifier = modifier,
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.onBackground
     ) {
@@ -118,9 +120,9 @@ fun InfoUserContent(
 }
 
 @Composable
-fun InfoUserChannel() {
+fun InfoUserChannel(modifier: Modifier = Modifier) {
     LazyRow(
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 20.dp)
     ) {
         items(6) { index ->
@@ -163,9 +165,9 @@ fun InfoUserChannel() {
 }
 
 @Composable
-fun InfoUserDescription() {
+fun InfoUserDescription(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 12.dp)
     ) {
         val description = buildAnnotatedString {
@@ -210,9 +212,9 @@ fun InfoUserDescription() {
 }
 
 @Composable
-fun InfoUser() {
+fun InfoUser(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 8.dp, bottom = 12.dp)
             .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -264,7 +266,7 @@ fun InfoUser() {
 }
 
 @Composable
-fun ProfileUserTopBar() {
+fun ProfileUserTopBar(modifier: Modifier = Modifier) {
     TopAppBar(
         title = {
             Text(
@@ -275,7 +277,7 @@ fun ProfileUserTopBar() {
                 )
             )
         },
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             IconButton(imageVector = Icons.Rounded.ArrowBack)
         },
