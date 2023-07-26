@@ -1,6 +1,7 @@
 package com.bayu.instagramhomepage.ui.profileuser
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -42,7 +43,7 @@ fun ProfileUserScreenPreview() {
     ProfileUserScreen()
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileUserScreen(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState()
@@ -54,6 +55,7 @@ fun ProfileUserScreen(modifier: Modifier = Modifier) {
             Icons.Outlined.AccountBox,
         )
     }
+
     val scope = rememberCoroutineScope()
 
     Scaffold(
