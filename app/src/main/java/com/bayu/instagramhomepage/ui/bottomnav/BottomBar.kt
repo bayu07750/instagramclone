@@ -1,10 +1,13 @@
 package com.bayu.instagramhomepage.ui.bottomnav
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.*
-import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,7 +17,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bayu.instagramhomepage.ui.utils.ClearRippleTheme
 
 @Composable
 fun BottomBar(
@@ -62,23 +64,21 @@ fun RowScope.AddItem(
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
-    CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
-        BottomNavigationItem(
-            icon = {
-                Icon(
-                    imageVector = if (selected) screen.selectedIcon else screen.unSelectedIcon,
-                    contentDescription = "${screen.title} Icon"
-                )
-            },
-            alwaysShowLabel = false,
-            selected = selected,
-            unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-            onClick = {
-                navController.navigate(screen.route) {
-                    popUpTo(navController.graph.findStartDestination().id)
-                    launchSingleTop = true
-                }
+    BottomNavigationItem(
+        icon = {
+            Icon(
+                imageVector = if (selected) screen.selectedIcon else screen.unSelectedIcon,
+                contentDescription = "${screen.title} Icon"
+            )
+        },
+        alwaysShowLabel = false,
+        selected = selected,
+        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+        onClick = {
+            navController.navigate(screen.route) {
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
             }
-        )
-    }
+        }
+    )
 }

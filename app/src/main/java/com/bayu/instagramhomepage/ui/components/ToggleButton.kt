@@ -7,18 +7,17 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.bayu.instagramhomepage.ui.utils.ClearRippleTheme
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
@@ -58,15 +57,19 @@ fun ToggleButton(
         1F
     }
 
-    CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
-        Icon(
-            imageVector = if (isChecked) checkedImageVector else unCheckedImageVector,
-            contentDescription = null,
-            modifier = Modifier
-                .clickable(onClick = onClick)
-                .size(28.dp)
-                .scale(scale),
-            tint = tint,
-        )
-    }
+    Icon(
+        imageVector = if (isChecked) checkedImageVector else unCheckedImageVector,
+        contentDescription = null,
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember {
+                    MutableInteractionSource()
+                },
+                indication = null,
+                onClick = onClick,
+            )
+            .size(28.dp)
+            .scale(scale),
+        tint = tint,
+    )
 }
