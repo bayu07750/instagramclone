@@ -111,7 +111,7 @@ fun ExplorePosts(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Adaptive(120.dp),
+        columns = GridCells.Adaptive(100.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         contentPadding = PaddingValues(8.dp)
