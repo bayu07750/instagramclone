@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -64,20 +65,44 @@ fun ProfileUserScreen(modifier: Modifier = Modifier) {
             ProfileUserTopBar()
         },
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding),
         ) {
-            Column {
-                InfoUser()
-                InfoUserDescription()
+            item {
+                Column {
+                    InfoUser()
+                    InfoUserDescription()
+                }
             }
-            InfoUserChannel()
-            InfoUserContent(
-                pagerState = pagerState,
-                listTabs = listTabs,
-                scope = scope
-            )
+            item {
+                InfoUserChannel()
+            }
+            stickyHeader {
+                InfoUserContent(
+                    pagerState = pagerState,
+                    listTabs = listTabs,
+                    scope = scope
+                )
+            }
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth(1f)
+                        .height(800.dp)
+                ) {
+                    HorizontalPager(
+                        pageCount = 4,
+                        state = pagerState,
+                    ) { page: Int ->
+                        when (page) {
+                            0 -> Collections(modifier = Modifier.fillMaxSize(1f))
+                            1 -> Reels()
+                            2 -> Streaming()
+                            3 -> Tags()
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -113,17 +138,6 @@ fun InfoUserContent(
                     )
                 },
             )
-        }
-    }
-    HorizontalPager(
-        pageCount = 4,
-        state = pagerState,
-    ) { page: Int ->
-        when (page) {
-            0 -> Collections()
-            1 -> Reels()
-            2 -> Streaming()
-            3 -> Tags()
         }
     }
 }
