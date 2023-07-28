@@ -1,29 +1,44 @@
 package com.bayu.instagramhomepage.ui.profileuser
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,8 +49,8 @@ import com.bayu.instagramhomepage.R
 import com.bayu.instagramhomepage.ui.components.IconButton
 import com.bayu.instagramhomepage.ui.components.OutlinedButton
 import com.bayu.instagramhomepage.ui.theme.colorsInstagram
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.bayu.instagramhomepage.ui.utils.Data
+import com.bayu.instagramhomepage.ui.utils.Post
 
 
 @Preview
@@ -44,20 +59,13 @@ fun ProfileUserScreenPreview() {
     ProfileUserScreen()
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProfileUserScreen(modifier: Modifier = Modifier) {
-    val pagerState = rememberPagerState()
-    val listTabs = remember {
-        listOf(
-            Icons.Outlined.Apps,
-            Icons.Outlined.SmartDisplay,
-            Icons.Outlined.PlayArrow,
-            Icons.Outlined.AccountBox,
-        )
-    }
-
-    val scope = rememberCoroutineScope()
+fun ProfileUserScreen(
+    modifier: Modifier = Modifier,
+    posts: List<Post> = remember { Data.dummyDataPosts },
+) {
+    val lazyGridState = rememberLazyGridState()
+    var currentPage by remember { mutableStateOf(ProfileTab.Posts) }
 
     Scaffold(
         modifier = modifier,
@@ -65,41 +73,51 @@ fun ProfileUserScreen(modifier: Modifier = Modifier) {
             ProfileUserTopBar()
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding),
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(120.dp),
+            state = lazyGridState,
+            modifier = Modifier.padding(innerPadding),
         ) {
-            item {
+            header {
                 Column {
                     InfoUser()
                     InfoUserDescription()
                 }
             }
-            item {
+
+            header {
                 InfoUserChannel()
             }
-            stickyHeader {
+
+            header {
                 InfoUserContent(
-                    pagerState = pagerState,
-                    listTabs = listTabs,
-                    scope = scope
+                    listTabs = profileTabs,
+                    currentPage = currentPage,
+                    onItemTabClicked = { selectedTab ->
+                        currentPage = selectedTab
+                    },
                 )
             }
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth(1f)
-                        .height(800.dp)
-                ) {
-                    HorizontalPager(
-                        pageCount = 4,
-                        state = pagerState,
-                    ) { page: Int ->
-                        when (page) {
-                            0 -> Collections(modifier = Modifier.fillMaxSize(1f))
-                            1 -> Reels()
-                            2 -> Streaming()
-                            3 -> Tags()
-                        }
+            when (currentPage) {
+                ProfileTab.Posts -> {
+                    postItems(items = posts)
+                }
+
+                ProfileTab.Reels -> {
+                    header {
+                        Reels()
+                    }
+                }
+
+                ProfileTab.Lives -> {
+                    header {
+                        Streaming()
+                    }
+                }
+
+                ProfileTab.Account -> {
+                    header {
+                        Tags()
                     }
                 }
             }
@@ -107,33 +125,30 @@ fun ProfileUserScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun InfoUserContent(
-    pagerState: PagerState,
-    listTabs: List<ImageVector>,
-    scope: CoroutineScope,
+    listTabs: Array<ProfileTab>,
+    currentPage: ProfileTab,
+    onItemTabClicked: (ProfileTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TabRow(
-        selectedTabIndex = pagerState.currentPage,
+        selectedTabIndex = listTabs.indexOf(currentPage),
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.onBackground
     ) {
-        listTabs.forEachIndexed { index, imageVector ->
+        listTabs.forEachIndexed { index, tab ->
             Tab(
-                selected = pagerState.currentPage == index,
+                selected = listTabs.indexOf(currentPage) == index,
                 onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
+                    onItemTabClicked.invoke(tab)
                 },
                 modifier = Modifier,
                 icon = {
                     Icon(
-                        imageVector = imageVector,
-                        contentDescription = null,
+                        imageVector = tab.icon,
+                        contentDescription = stringResource(id = tab.label),
                         modifier = Modifier.size(28.dp)
                     )
                 },

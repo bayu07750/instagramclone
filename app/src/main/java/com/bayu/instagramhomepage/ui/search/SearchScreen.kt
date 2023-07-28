@@ -106,12 +106,12 @@ fun SearchContent(
 @Composable
 fun ExplorePosts(
     modifier: Modifier = Modifier,
-    listPosts: List<Post> = Data.dummyDataPosts,
+    listPosts: List<Post> = remember { Data.dummyDataPosts },
     onLongPressPost: ((Boolean, String) -> Unit)? = null,
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Adaptive(100.dp),
+        columns = GridCells.Adaptive(120.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         contentPadding = PaddingValues(8.dp)
@@ -158,7 +158,7 @@ fun ExplorePost(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .aspectRatio(1f/1f)
+                    .aspectRatio(1f / 1f)
                     .placeholder(
                         visible = !isLoadImageSuccessfully,
                         highlight = PlaceholderHighlight.shimmer(),
