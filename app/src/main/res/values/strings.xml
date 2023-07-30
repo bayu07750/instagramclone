@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">InstagramHomePage</string>
-    <string name="desc_instagram_logo">Instagram Logo</string>
+    <string name="desc_instagram_logo">Instagram L[ogo</string>
+    <string name="posts">Posts</string>
+    <string name="reels">Reels</string>
+    <string name="lives">Lives</string>
+    <string name="accounts">Accounts</string>
 </resources>

@@ -1,13 +1,35 @@
 package com.bayu.instagramhomepage.ui.profileuser
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.bayu.instagramhomepage.ui.search.ExplorePost
 import com.bayu.instagramhomepage.ui.search.ExplorePosts
+import com.bayu.instagramhomepage.ui.utils.Post
+
+context(LazyGridScope)
+fun postItems(items: List<Post>) {
+    items(items = items) { post ->
+        ExplorePost(post = post)
+    }
+}
+
+context(LazyGridScope)
+fun header(key: Any? = null, content: @Composable LazyGridItemScope.() -> Unit) {
+    item(
+        span = { GridItemSpan(maxCurrentLineSpan) },
+        key = key,
+        content = content,
+    )
+}
 
 @Composable
 fun Collections(modifier: Modifier = Modifier) {
