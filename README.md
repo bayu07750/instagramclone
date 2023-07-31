@@ -19,5 +19,5 @@
 - [ ] Profile Screen
 - [ ] Notification Screen
 - [ ] Move hardcode data to ViewModel or Repository?
-- [ ] Improve better performance for ProfileUserScreen avoid nesting Lazy* (LazyColumn > LazyVerticalGrid)
+- [X] Improve better performance for ProfileUserScreen avoid nesting Lazy* (LazyColumn > LazyVerticalGrid)
 ```
