@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -81,7 +82,22 @@ fun ProfileUserScreen(
             header {
                 Column {
                     InfoUser()
-                    InfoUserDescription()
+                    InfoUserDescription {
+                        OutlinedButton(
+                            text = "Follow",
+                            modifier = Modifier.weight(1F)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        OutlinedButton(
+                            text = "Message",
+                            modifier = Modifier.weight(1F)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        OutlinedButton(
+                            text = "Email",
+                            modifier = Modifier.weight(1F)
+                        )
+                    }
                 }
             }
 
@@ -203,7 +219,7 @@ fun InfoUserChannel(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun InfoUserDescription(modifier: Modifier = Modifier) {
+fun InfoUserDescription(modifier: Modifier = Modifier, actions: @Composable RowScope.() -> Unit) {
     Column(
         modifier = modifier
             .padding(horizontal = 12.dp)
@@ -231,20 +247,7 @@ fun InfoUserDescription(modifier: Modifier = Modifier) {
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            OutlinedButton(
-                text = "Follow",
-                modifier = Modifier.weight(1F)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            OutlinedButton(
-                text = "Message",
-                modifier = Modifier.weight(1F)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            OutlinedButton(
-                text = "Email",
-                modifier = Modifier.weight(1F)
-            )
+            actions.invoke(this)
         }
     }
 }
