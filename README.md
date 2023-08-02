@@ -16,7 +16,7 @@
 
 ## TODO
 ```
-- [ ] Profile Screen
+- [X] Profile Screen
 - [ ] Notification Screen
 - [ ] Move hardcode data to ViewModel or Repository?
 - [X] Improve better performance for ProfileUserScreen avoid nesting Lazy* (LazyColumn > LazyVerticalGrid)
