@@ -15,6 +15,7 @@
 - Contributions are highly welcomed :)
 
 ## TODO
+
 ```
 - [X] Profile Screen
 - [ ] Notification Screen
